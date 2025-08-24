@@ -154,6 +154,22 @@ createCharacterGrid() {
   if (!grid || !App.data) {
     console.log('❌ Grid나 데이터가 없음');
     return;
+// 👈 이 부분들 추가!
+  // 페이지 요소들을 보이게 만들기
+  const contentContainer = document.querySelector('.content-container');
+  const pageTitle = document.querySelector('.page-title');
+  const pageSubtitle = document.querySelector('.page-subtitle');
+  
+  if (contentContainer) {
+    setTimeout(() => contentContainer.classList.add('visible'), 100);
+  }
+  if (pageTitle) {
+    setTimeout(() => pageTitle.classList.add('visible'), 200);
+  }
+  if (pageSubtitle) {
+    setTimeout(() => pageSubtitle.classList.add('visible'), 300);
+  }
+
   }
   
   console.log('✅ 캐릭터 생성 시작');
@@ -176,12 +192,12 @@ createCharacterGrid() {
     
     grid.appendChild(item);
     
-    // 🔧 애니메이션 대신 바로 표시
+    // 캐릭터 아이템 바로 보이게 하기
     item.classList.add('visible');
     item.style.opacity = '1';
     item.style.transform = 'translateY(0)';
     
-    console.log(`✅ 캐릭터 ${index + 1} 생성 완료:`, character.name);
+    console.log(`캐릭터 ${index + 1} 생성:`, character.name);
   });
   
   console.log('✅ 모든 캐릭터 생성 완료!');
@@ -192,6 +208,15 @@ createCharacterGrid() {
     const grid = document.getElementById('archive-grid');
     if (!grid || !App.data) return;
     
+      // 페이지 요소들 보이게 하기
+  const contentContainer = document.querySelector('.content-container');
+  const pageTitle = document.querySelector('.page-title');
+  const pageSubtitle = document.querySelector('.page-subtitle');
+  
+  if (contentContainer) contentContainer.classList.add('visible');
+  if (pageTitle) pageTitle.classList.add('visible');
+  if (pageSubtitle) pageSubtitle.classList.add('visible');
+
     grid.innerHTML = '';
     
     App.data.archives.forEach((archive, index) => {
@@ -231,6 +256,15 @@ createCharacterGrid() {
   createBlogList() {
     const list = document.getElementById('blog-list');
     if (!list || !App.data) return;
+
+     // 페이지 요소들 보이게 하기  
+  const contentContainer = document.querySelector('.content-container');
+  const pageTitle = document.querySelector('.page-title');
+  const pageSubtitle = document.querySelector('.page-subtitle');
+  
+  if (contentContainer) contentContainer.classList.add('visible');
+  if (pageTitle) pageTitle.classList.add('visible');
+  if (pageSubtitle) pageSubtitle.classList.add('visible');
     
     list.innerHTML = '';
     
