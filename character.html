@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Characters - 창작자 개인 홈페이지</title>
     
+    <!-- CSS 파일들 -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
 </head>
 <body>
+    <!-- 페이지 전환 효과 -->
     <div id="page-overlay" class="active"></div>
+    
+    <!-- 네비게이션 -->
     <nav class="navbar"></nav>
 
+    <!-- 메인 내용 -->
     <main class="main-content">
         <section class="section active">
             <div class="content-container">
@@ -22,15 +26,17 @@
                     <p class="page-subtitle">이 세계를 만들어가는 특별한 인물들을 만나보세요</p>
                 </div>
 
-                <!-- 캐릭터들이 여기에 자동으로 나타남 -->
+                <!-- 👈 이 div가 중요해요! JavaScript가 여기를 찾아요 -->
                 <div id="character-grid" class="character-grid">
-                    <!-- JavaScript가 자동으로 채워넣음 -->
+                    <div style="color: white; text-align: center; padding: 50px;">
+                        캐릭터를 불러오는 중...
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- JavaScript 파일들 - 순서 중요! -->
     <script src="data/data.js"></script>
     <script src="js/core.js"></script>
     <script src="js/pages.js"></script>

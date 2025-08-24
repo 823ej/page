@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Characters - 창작자 개인 홈페이지</title>
+    <title>Archive - 창작자 개인 홈페이지</title>
     
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
 </head>
 <body>
     <div id="page-overlay" class="active"></div>
@@ -18,19 +17,20 @@
         <section class="section active">
             <div class="content-container">
                 <div class="section-header">
-                    <h1 class="page-title">Characters</h1>
-                    <p class="page-subtitle">이 세계를 만들어가는 특별한 인물들을 만나보세요</p>
+                    <h1 class="page-title">Archive</h1>
+                    <p class="page-subtitle">창작한 작품들을 모아둔 공간입니다</p>
                 </div>
 
-                <!-- 아카이브들이 여기에 자동으로 나타남 -->
+                <!-- 👈 이 div ID가 중요해요! -->
                 <div id="archive-grid" class="archive-grid">
-                    <!-- JavaScript가 자동으로 채워넣음 -->
+                    <div style="color: white; text-align: center; padding: 50px;">
+                        작품을 불러오는 중...
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <script src="data/data.js"></script>
     <script src="js/core.js"></script>
     <script src="js/pages.js"></script>
