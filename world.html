@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창작자 개인 홈페이지</title>
+    
+    <!-- ✨ CSS 파일들 연결 -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
+    
+    <!-- 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+</head>
+<body>
+    <!-- 페이지 전환 효과 -->
+    <div id="page-overlay" class="active"></div>
+    
+    <!-- 네비게이션 (JavaScript가 자동으로 만듦) -->
+    <nav class="navbar"></nav>
+
+    <!-- 메인 내용 -->
+    <main class="main-content">
+        <section class="section active">
+            <div class="content-container">
+                <div class="section-header">
+                    <h1 class="page-title">World</h1>
+                    <p class="page-subtitle">이 세계의 모든 것이 시작되는 곳을 탐험해보세요.</p>
+                </div>
+
+                <div class="world-banner">
+                    <img src="https://picsum.photos/1200/500?random=103" alt="세계관 배너" class="banner-image">
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            <h2>광활한 세계</h2>
+                            <p>수많은 이야기가 펼쳐지는 무대</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="world-content">
+                    <div class="world-text">
+                        <h2>세계의 탄생</h2>
+                        <p>이 세계는 어떻게 만들어졌을까요? 고대로부터 전해져 내려오는 창조의 이야기와 신화들이 이곳에서 시작됩니다.</p>
+                    </div>
+                    <div class="world-image">
+                        <img src="https://picsum.photos/600/500?random=104" alt="세계의 시작">
+                    </div>
+                </div>
+
+                <div class="world-features">
+                    <h2>세계의 특징</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon blue">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <h3>다양한 종족</h3>
+                            <p>인간, 엘프, 드워프부터 신비로운 마법 생물들까지</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon cyan">
+                                <i data-lucide="image"></i>
+                            </div>
+                            <h3>마법의 힘</h3>
+                            <p>세상 곳곳에 스며들어 있는 신비로운 마법의 에너지</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon purple">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <h3>고대의 역사</h3>
+                            <p>수천 년에 걸쳐 이어져 내려오는 전설과 역사</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- JavaScript 파일들 연결 -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="data/data.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/pages.js"></script>
+</body>
+</html>
