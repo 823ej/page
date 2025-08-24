@@ -86,6 +86,28 @@ App.components = {
     
     console.log('🏠 메인 페이지 초기화 완료!');
   },
+  // 배경 버블 생성 (추가할 함수)
+createBackgroundBubbles() {
+  const container = document.createElement('div');
+  container.id = 'background-bubbles';
+  
+  for (let i = 0; i < 15; i++) {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = Math.random() * 20 + 10;
+    
+    bubble.style.left = Math.random() * 100 + '%';
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.animationDuration = (Math.random() * 15 + 15) + 's';
+    bubble.style.animationDelay = (Math.random() * -15) + 's';
+    
+    container.appendChild(bubble);
+  }
+  
+  document.body.insertBefore(container, document.body.firstChild);
+  console.log('🫧 물거품 효과 추가됨!');
+},
   // 네비게이션 생성
   createNavigation(activePage) {
     const nav = document.querySelector('.navbar');
@@ -256,6 +278,9 @@ App.init = async function() {
   // 현재 페이지 확인
   const currentPage = App.utils.getCurrentPage();
   console.log('📄 현재 페이지:', currentPage);
+
+ // 🫧 물거품 효과 추가 (여기에 추가!)
+  App.components.createBackgroundBubbles();
   
   // 네비게이션 생성
   App.components.createNavigation(currentPage);
