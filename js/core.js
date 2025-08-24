@@ -73,6 +73,19 @@ App.utils = {
 
 // 컴포넌트 시스템
 App.components = {
+   // 메인 페이지 초기화 (👈 새로 추가!)
+  initMainPage() {
+    console.log('🏠 메인 페이지 초기화 중...');
+    
+    const imageContainer = document.querySelector('.main-image-container');
+    if (imageContainer) {
+      setTimeout(() => {
+        imageContainer.classList.add('visible');
+      }, 500);
+    }
+    
+    console.log('🏠 메인 페이지 초기화 완료!');
+  },
   // 네비게이션 생성
   createNavigation(activePage) {
     const nav = document.querySelector('.navbar');
@@ -248,13 +261,16 @@ App.init = async function() {
   App.components.createNavigation(currentPage);
   
   // 페이지별 콘텐츠 생성
-  if (currentPage === 'character.html') {
-    App.components.createCharacterGrid();
-  } else if (currentPage === 'archive.html') {
-    App.components.createArchiveGrid();
-  } else if (currentPage === 'blog.html') {
-    App.components.createBlogList();
-  }
+if (currentPage === 'character.html') {
+  App.components.createCharacterGrid();
+} else if (currentPage === 'archive.html') {
+  App.components.createArchiveGrid();
+} else if (currentPage === 'blog.html') {
+  App.components.createBlogList();
+} else if (currentPage === 'index.html' || currentPage === '') {
+  // 메인 페이지 처리 추가!
+  App.components.initMainPage();
+}
   
   // 공통 기능 설정
   App.setupCommonFeatures();
