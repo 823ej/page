@@ -1,3 +1,6 @@
+// 🌟 GitHub Pages용 수정된 core.js
+// data.json 대신 data.js의 전역 변수를 사용해요!
+
 // 전역 앱 객체
 window.App = {
   data: null,
@@ -8,14 +11,25 @@ window.App = {
 
 // 유틸리티 함수들
 App.utils = {
-  // 데이터 로드
+  // 🔧 데이터 로드 (JSON 대신 전역 변수 사용)
   async loadData() {
     try {
-      const response = await fetch('data/data.json');
-      App.data = await response.json();
-      return App.data;
+      // data.js에서 설정한 전역 변수 사용
+      if (window.websiteData) {
+        App.data = window.websiteData;
+        console.log('✅ 데이터 로딩 성공!', App.data);
+        return App.data;
+      } else {
+        // data.js가 아직 로드되지 않은 경우 잠시 기다림
+        await new Promise(resolve => setTimeout(resolve, 100));
+        if (window.websiteData) {
+          App.data = window.websiteData;
+          return App.data;
+        }
+        throw new Error('웹사이트 데이터를 찾을 수 없습니다');
+      }
     } catch (error) {
-      console.error('데이터 로드 실패:', error);
+      console.error('❌ 데이터 로드 실패:', error);
       return null;
     }
   },
@@ -54,74 +68,6 @@ App.utils = {
     if (className) element.className = className;
     if (innerHTML) element.innerHTML = innerHTML;
     return element;
-  },
-
-  // 날짜 포맷팅
-  formatDate(dateString) {
-    return dateString; // 이미 YYYY.MM.DD 형식
-  },
-
-  // 배열 청크 분할
-  chunk(array, size) {
-    const chunks = [];
-    for (let i = 0; i < array.length; i += size) {
-      chunks.push(array.slice(i, i + size));
-    }
-    return chunks;
-  }
-};
-
-// 애니메이션 시스템
-App.animations = {
-  // 기본 설정
-  config: {
-    duration: 800,
-    easing: 'ease-out',
-    staggerDelay: 150
-  },
-
-  // Intersection Observer 설정
-  createObserver(callback, options = {}) {
-    const defaultOptions = {
-      root: null,
-      rootMargin: '0px 0px -50px 0px',
-      threshold: 0.1
-    };
-    
-    return new IntersectionObserver(callback, { ...defaultOptions, ...options });
-  },
-
-  // 순차 애니메이션
-  staggerAnimation(elements, animationClass, delay = this.config.staggerDelay) {
-    elements.forEach((element, index) => {
-      setTimeout(() => {
-        element.classList.add(animationClass);
-      }, index * delay);
-    });
-  },
-
-  // 페이드인 효과
-  fadeIn(element, delay = 0) {
-    element.style.opacity = '0';
-    element.style.transform = 'translateY(20px)';
-    element.style.transition = `all ${this.config.duration}ms ${this.config.easing}`;
-    
-    setTimeout(() => {
-      element.style.opacity = '1';
-      element.style.transform = 'translateY(0)';
-    }, delay);
-  },
-
-  // 스케일 애니메이션
-  scaleIn(element, delay = 0) {
-    element.style.opacity = '0';
-    element.style.transform = 'scale(0.8)';
-    element.style.transition = `all ${this.config.duration}ms ${this.config.easing}`;
-    
-    setTimeout(() => {
-      element.style.opacity = '1';
-      element.style.transform = 'scale(1)';
-    }, delay);
   }
 };
 
@@ -129,7 +75,9 @@ App.animations = {
 App.components = {
   // 네비게이션 생성
   createNavigation(activePage) {
-    const nav = App.utils.createElement('nav', 'navbar');
+    const nav = document.querySelector('.navbar');
+    if (!nav || !App.data) return;
+    
     const container = App.utils.createElement('div', 'nav-container');
     const links = App.utils.createElement('div', 'nav-links');
 
@@ -154,211 +102,162 @@ App.components = {
     });
 
     container.appendChild(links);
+    nav.innerHTML = '';
     nav.appendChild(container);
-    return nav;
+    
+    // 애니메이션
+    setTimeout(() => {
+      nav.classList.add('visible');
+    }, 100);
   },
 
-  // 푸터 생성
-  createFooter() {
-    const footer = App.utils.createElement('footer', 'footer');
-    const content = App.utils.createElement('div', 'footer-content');
-    const text = App.utils.createElement('p', '', App.data.site.copyright);
+  // 캐릭터 그리드 생성
+  createCharacterGrid() {
+    const grid = document.getElementById('character-grid');
+    if (!grid || !App.data) return;
     
-    content.appendChild(text);
-    footer.appendChild(content);
-    return footer;
-  },
-
-  // 맨 위로 버튼
-  createScrollTopButton() {
-    const button = App.utils.createElement('button', 'scroll-top-btn');
-    button.id = 'scroll-top';
-    button.innerHTML = '<i data-lucide="chevron-up"></i>';
+    grid.innerHTML = '';
     
-    // 스크롤 이벤트
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        button.classList.add('show');
-      } else {
-        button.classList.remove('show');
-      }
-    });
-    
-    // 클릭 이벤트
-    button.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    
-    return button;
-  },
-
-  // 배경 버블
-  createBackgroundBubbles() {
-    const container = App.utils.createElement('div');
-    container.id = 'background-bubbles';
-    
-    for (let i = 0; i < 15; i++) {
-      const bubble = App.utils.createElement('div', 'bubble');
-      const size = Math.random() * 20 + 10;
+    App.data.characters.forEach((character, index) => {
+      const item = App.utils.createElement('div', 'character-item');
       
-      bubble.style.left = Math.random() * 100 + '%';
-      bubble.style.width = size + 'px';
-      bubble.style.height = size + 'px';
-      bubble.style.animationDuration = (Math.random() * 15 + 15) + 's';
-      bubble.style.animationDelay = (Math.random() * -15) + 's';
+      const img = App.utils.createElement('img');
+      img.src = character.image;
+      img.alt = character.name;
+      img.style.opacity = '0';
+      img.style.transition = 'opacity 0.5s ease-in-out';
       
-      container.appendChild(bubble);
-    }
-    
-    return container;
-  },
-
-  // 그리드 아이템 생성
-  createGridItem(data, type) {
-    const item = App.utils.createElement('div', `${type}-item`);
-    
-    switch (type) {
-      case 'character':
-        return this.createCharacterItem(data, item);
-      case 'archive':
-        return this.createArchiveItem(data, item);
-      case 'blog':
-        return this.createBlogItem(data, item);
-      default:
-        return item;
-    }
-  },
-
-  // 캐릭터 아이템
-  createCharacterItem(character, item) {
-    const img = App.utils.createElement('img');
-    img.src = character.image;
-    img.alt = character.name;
-    img.style.opacity = '0';
-    img.style.transition = 'opacity 0.5s ease-in-out';
-    
-    img.onload = () => {
-      img.style.opacity = '1';
-    };
-    
-    item.appendChild(img);
-    
-    // 클릭 이벤트
-    item.addEventListener('click', () => {
-      App.utils.navigateToPage(`character${character.id}.html`);
+      img.onload = () => {
+        setTimeout(() => {
+          img.style.opacity = '1';
+        }, index * 100);
+      };
+      
+      item.appendChild(img);
+      
+      // 클릭 이벤트 - 상세 정보 알림으로 표시
+      item.addEventListener('click', () => {
+        const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
+        alert(message);
+      });
+      
+      grid.appendChild(item);
+      
+      // 애니메이션
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, 300 + (index * 150));
     });
-    
-    return item;
   },
 
-  // 아카이브 아이템
-  createArchiveItem(archive, item) {
-    const imageContainer = App.utils.createElement('div', 'archive-image');
+  // 아카이브 그리드 생성
+  createArchiveGrid() {
+    const grid = document.getElementById('archive-grid');
+    if (!grid || !App.data) return;
     
-    if (archive.image) {
+    grid.innerHTML = '';
+    
+    App.data.archives.forEach((archive, index) => {
+      const item = App.utils.createElement('div', 'archive-item');
+      
+      const imageDiv = App.utils.createElement('div', 'archive-image');
       const img = App.utils.createElement('img');
       img.src = archive.image;
       img.alt = archive.title;
-      imageContainer.appendChild(img);
-    } else {
-      const noImage = App.utils.createElement('div', 'archive-no-image', 'No Image');
-      imageContainer.appendChild(noImage);
-    }
-    
-    const info = App.utils.createElement('div', 'archive-info');
-    const date = App.utils.createElement('span', 'archive-date', archive.date);
-    const title = App.utils.createElement('h3', 'archive-title', archive.title);
-    
-    info.appendChild(date);
-    info.appendChild(title);
-    item.appendChild(imageContainer);
-    item.appendChild(info);
-    
-    // 클릭 이벤트
-    item.addEventListener('click', () => {
-      App.utils.navigateToPage(`archive${archive.id}.html`);
+      imageDiv.appendChild(img);
+      
+      const info = App.utils.createElement('div', 'archive-info');
+      const date = App.utils.createElement('span', 'archive-date', archive.date);
+      const title = App.utils.createElement('h3', 'archive-title', archive.title);
+      
+      info.appendChild(date);
+      info.appendChild(title);
+      item.appendChild(imageDiv);
+      item.appendChild(info);
+      
+      // 클릭 이벤트
+      item.addEventListener('click', () => {
+        const message = `${archive.title}\n\n${archive.description}\n\n종류: ${archive.type}\n날짜: ${archive.date}`;
+        alert(message);
+      });
+      
+      grid.appendChild(item);
+      
+      // 애니메이션
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, 300 + (index * 120));
     });
-    
-    return item;
   },
 
-  // 블로그 아이템
-  createBlogItem(post, item) {
-    const content = App.utils.createElement('div', 'blog-list-content');
-    const title = App.utils.createElement('h3', 'blog-list-title', post.title);
-    const meta = App.utils.createElement('div', 'blog-list-meta');
-    const category = App.utils.createElement('span', 'blog-list-category', post.category);
-    const date = App.utils.createElement('span', 'blog-list-date', post.date);
+  // 블로그 리스트 생성
+  createBlogList() {
+    const list = document.getElementById('blog-list');
+    if (!list || !App.data) return;
     
-    meta.appendChild(category);
-    meta.appendChild(date);
-    content.appendChild(title);
-    content.appendChild(meta);
-    item.appendChild(content);
+    list.innerHTML = '';
     
-    // 클릭 이벤트
-    item.addEventListener('click', () => {
-      App.utils.navigateToPage(`blog${post.id}.html`);
+    App.data.blogPosts.forEach((post, index) => {
+      const item = App.utils.createElement('div', 'blog-list-item');
+      
+      const content = App.utils.createElement('div', 'blog-list-content');
+      const title = App.utils.createElement('h3', 'blog-list-title', post.title);
+      const meta = App.utils.createElement('div', 'blog-list-meta');
+      const category = App.utils.createElement('span', 'blog-list-category', post.category);
+      const date = App.utils.createElement('span', 'blog-list-date', post.date);
+      
+      meta.appendChild(category);
+      meta.appendChild(date);
+      content.appendChild(title);
+      content.appendChild(meta);
+      item.appendChild(content);
+      
+      // 클릭 이벤트
+      item.addEventListener('click', () => {
+        const message = `${post.title}\n\n${post.description}\n\n카테고리: ${post.category}\n작성일: ${post.date}`;
+        alert(message);
+      });
+      
+      list.appendChild(item);
+      
+      // 애니메이션
+      setTimeout(() => {
+        item.classList.add('visible');
+      }, 50 + (index * 100));
     });
-    
-    return item;
   }
 };
 
 // 페이지 초기화 시스템
 App.init = async function() {
+  console.log('🚀 앱 초기화 시작...');
+  
   // 데이터 로드
   await App.utils.loadData();
   
   if (!App.data) {
-    console.error('데이터를 로드할 수 없습니다.');
+    console.error('❌ 데이터를 로드할 수 없습니다.');
     return;
   }
 
-  // 기본 요소들 생성
+  // 현재 페이지 확인
   const currentPage = App.utils.getCurrentPage();
+  console.log('📄 현재 페이지:', currentPage);
   
-  // 네비게이션 삽입
-  const existingNav = document.querySelector('.navbar');
-  if (existingNav) {
-    const newNav = App.components.createNavigation(currentPage);
-    existingNav.replaceWith(newNav);
-    
-    // 애니메이션 적용
-    setTimeout(() => {
-      newNav.classList.add('visible');
-    }, 100);
+  // 네비게이션 생성
+  App.components.createNavigation(currentPage);
+  
+  // 페이지별 콘텐츠 생성
+  if (currentPage === 'character.html') {
+    App.components.createCharacterGrid();
+  } else if (currentPage === 'archive.html') {
+    App.components.createArchiveGrid();
+  } else if (currentPage === 'blog.html') {
+    App.components.createBlogList();
   }
   
-  // 푸터 삽입
-  const existingFooter = document.querySelector('.footer');
-  if (existingFooter) {
-    const newFooter = App.components.createFooter();
-    existingFooter.replaceWith(newFooter);
-    
-    setTimeout(() => {
-      newFooter.classList.add('visible');
-    }, 1500);
-  }
-  
-  // 맨 위로 버튼
-  const scrollBtn = App.components.createScrollTopButton();
-  document.body.appendChild(scrollBtn);
-  
-  // 배경 버블
-  const bubbles = App.components.createBackgroundBubbles();
-  document.body.insertBefore(bubbles, document.body.firstChild);
-  
-  // Lucide 아이콘 초기화
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
-  
-  // 페이지별 초기화
-  App.initPage(currentPage);
-  
-  // 공통 이벤트
-  App.setupCommonEvents();
+  // 공통 기능 설정
+  App.setupCommonFeatures();
   
   // 페이지 로딩 완료
   setTimeout(() => {
@@ -368,28 +267,12 @@ App.init = async function() {
       overlay.classList.remove('active');
     }
   }, 100);
+  
+  console.log('✅ 앱 초기화 완료!');
 };
 
-// 페이지별 초기화
-App.initPage = function(currentPage) {
-  switch (currentPage) {
-    case 'character.html':
-      App.pages.character.init();
-      break;
-    case 'archive.html':
-      App.pages.archive.init();
-      break;
-    case 'blog.html':
-      App.pages.blog.init();
-      break;
-    default:
-      // 기본 페이지 애니메이션
-      App.animations.fadeIn(document.querySelector('.content-container'), 300);
-  }
-};
-
-// 공통 이벤트 설정
-App.setupCommonEvents = function() {
+// 공통 기능 설정
+App.setupCommonFeatures = function() {
   // 이미지 로딩 처리
   document.querySelectorAll('img').forEach(img => {
     if (!img.complete) {
@@ -401,22 +284,17 @@ App.setupCommonEvents = function() {
     }
   });
   
-  // ESC 키로 모달 닫기
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const modals = document.querySelectorAll('.modal.active');
-      modals.forEach(modal => modal.classList.remove('active'));
-    }
-  });
-  
   // 페이지 언로드 시 페이드아웃
   window.addEventListener('beforeunload', () => {
     document.body.style.opacity = '0';
   });
 };
 
-// DOMContentLoaded에서 앱 초기화
-document.addEventListener('DOMContentLoaded', App.init);
+// 🎬 DOMContentLoaded에서 앱 초기화
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('📱 DOM 로딩 완료!');
+  App.init();
+});
 
 // 페이지 쇼 이벤트 (뒤로가기 대응)
 window.addEventListener('pageshow', (event) => {
