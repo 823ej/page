@@ -147,43 +147,45 @@ createBackgroundBubbles() {
   },
 
   // 캐릭터 그리드 생성
-  createCharacterGrid() {
-    const grid = document.getElementById('character-grid');
-    if (!grid || !App.data) return;
+createCharacterGrid() {
+  console.log('🔍 캐릭터 그리드 함수 실행됨!');
+  
+  const grid = document.getElementById('character-grid');
+  if (!grid || !App.data) {
+    console.log('❌ Grid나 데이터가 없음');
+    return;
+  }
+  
+  console.log('✅ 캐릭터 생성 시작');
+  grid.innerHTML = '';
+  
+  App.data.characters.forEach((character, index) => {
+    const item = App.utils.createElement('div', 'character-item');
     
-    grid.innerHTML = '';
+    const img = App.utils.createElement('img');
+    img.src = character.image;
+    img.alt = character.name;
     
-    App.data.characters.forEach((character, index) => {
-      const item = App.utils.createElement('div', 'character-item');
-      
-      const img = App.utils.createElement('img');
-      img.src = character.image;
-      img.alt = character.name;
-      img.style.opacity = '0';
-      img.style.transition = 'opacity 0.5s ease-in-out';
-      
-      img.onload = () => {
-        setTimeout(() => {
-          img.style.opacity = '1';
-        }, index * 100);
-      };
-      
-      item.appendChild(img);
-      
-      // 클릭 이벤트 - 상세 정보 알림으로 표시
-      item.addEventListener('click', () => {
-        const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
-        alert(message);
-      });
-      
-      grid.appendChild(item);
-      
-      // 애니메이션
-      setTimeout(() => {
-        item.classList.add('visible');
-      }, 300 + (index * 150));
+    item.appendChild(img);
+    
+    // 클릭 이벤트
+    item.addEventListener('click', () => {
+      const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
+      alert(message);
     });
-  },
+    
+    grid.appendChild(item);
+    
+    // 🔧 애니메이션 대신 바로 표시
+    item.classList.add('visible');
+    item.style.opacity = '1';
+    item.style.transform = 'translateY(0)';
+    
+    console.log(`✅ 캐릭터 ${index + 1} 생성 완료:`, character.name);
+  });
+  
+  console.log('✅ 모든 캐릭터 생성 완료!');
+},
 
   // 아카이브 그리드 생성
   createArchiveGrid() {
@@ -219,9 +221,9 @@ createBackgroundBubbles() {
       grid.appendChild(item);
       
       // 애니메이션
-      setTimeout(() => {
-        item.classList.add('visible');
-      }, 300 + (index * 120));
+      item.classList.add('visible');
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
     });
   },
 
@@ -255,10 +257,9 @@ createBackgroundBubbles() {
       
       list.appendChild(item);
       
-      // 애니메이션
-      setTimeout(() => {
-        item.classList.add('visible');
-      }, 50 + (index * 100));
+      item.classList.add('visible');
+      item.style.opacity = '1';
+      item.style.transform = 'translateX(0)';
     });
   }
 };
