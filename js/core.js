@@ -73,19 +73,25 @@ App.utils = {
 
 // 컴포넌트 시스템
 App.components = {
-   // 메인 페이지 초기화 (👈 새로 추가!)
-  initMainPage() {
-    console.log('🏠 메인 페이지 초기화 중...');
-    
-    const imageContainer = document.querySelector('.main-image-container');
-    if (imageContainer) {
-      setTimeout(() => {
-        imageContainer.classList.add('visible');
-      }, 500);
-    }
-    
-    console.log('🏠 메인 페이지 초기화 완료!');
-  },
+  // 기본 페이지 초기화
+initBasicPage() {
+  console.log('📄 기본 페이지 초기화...');
+  
+  const contentContainer = document.querySelector('.content-container');
+  const pageTitle = document.querySelector('.page-title');
+  const pageSubtitle = document.querySelector('.page-subtitle');
+  
+  if (contentContainer) {
+    setTimeout(() => contentContainer.classList.add('visible'), 100);
+  }
+  if (pageTitle) {
+    setTimeout(() => pageTitle.classList.add('visible'), 200);
+  }
+  if (pageSubtitle) {
+    setTimeout(() => pageSubtitle.classList.add('visible'), 300);
+  }
+},
+
   // 배경 버블 생성 (추가할 함수)
 createBackgroundBubbles() {
   const container = document.createElement('div');
@@ -327,8 +333,13 @@ if (currentPage === 'character.html') {
   App.components.createArchiveGrid();
 } else if (currentPage === 'blog.html') {
   App.components.createBlogList();
+} else if (currentPage === 'introduction.html') {
+  // Introduction 페이지 - 기본 애니메이션만
+  App.components.initBasicPage();
+} else if (currentPage === 'world.html') {
+  // World 페이지 - 기본 애니메이션만
+  App.components.initBasicPage();
 } else if (currentPage === 'index.html' || currentPage === '') {
-  // 메인 페이지 처리 추가!
   App.components.initMainPage();
 }
   
