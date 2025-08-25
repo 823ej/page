@@ -976,3 +976,162 @@
     gap: 4px;
   }
 }
+
+/* Blog Detail 페이지 - pages.css 파일 끝에 추가하세요 */
+
+/* Blog Detail 페이지 */
+.blog-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all var(--duration-slower) var(--easing-default);
+}
+
+.blog-detail-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blog-info h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: bold;
+  color: var(--color-text-primary);
+  text-align: left;
+  margin-bottom: var(--spacing-md);
+}
+
+.blog-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.blog-meta p:first-child {
+  font-size: var(--font-size-lg);
+  color: #93c5fd;
+  text-align: left;
+}
+
+.blog-meta p:last-child {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.blog-image-container {
+  position: relative;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all var(--duration-slower) var(--easing-default) 0.2s;
+}
+
+.blog-image-container.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.blog-image-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid white;
+  transition: all var(--duration-normal) ease;
+}
+
+.blog-image-container img:hover {
+  transform: scale(1.02);
+}
+
+.blog-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all var(--duration-slower) var(--easing-default) 0.4s;
+}
+
+.blog-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blog-description h2,
+.blog-main-content h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.blog-description p,
+.blog-main-content p {
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-md);
+}
+
+.blog-main-content {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border-primary);
+  transition: all var(--duration-normal) ease;
+}
+
+.blog-main-content:hover {
+  background: var(--color-bg-card-hover);
+}
+
+.blog-info-detail {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-primary);
+}
+
+.blog-info-detail h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.blog-info-detail p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: 4px;
+}
+
+.blog-info-detail div {
+  margin-top: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* 블로그 상세 페이지 반응형 */
+@media (max-width: 768px) {
+  .blog-info h1 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .blog-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .blog-main-content {
+    padding: var(--spacing-lg);
+  }
+  
+  .blog-info-detail {
+    padding: var(--spacing-md);
+  }
+}

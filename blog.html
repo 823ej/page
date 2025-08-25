@@ -14,17 +14,57 @@
     <nav class="navbar"></nav>
 
     <main class="main-content">
-        <section class="section active">
+        <!-- 블로그 목록 섹션 -->
+        <section id="blog-list-section" class="section active">
             <div class="content-container">
                 <div class="section-header">
                     <h1 class="page-title">Blog</h1>
                     <p class="page-subtitle">창작 과정과 일상을 기록하는 공간입니다</p>
                 </div>
 
-                <!-- 👈 이 div ID가 중요해요! -->
                 <div id="blog-list" class="blog-list">
                     <div style="color: white; text-align: center; padding: 50px;">
                         블로그를 불러오는 중...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 블로그 상세 섹션 -->
+        <section id="blog-detail-section" class="section">
+            <div class="content-container">
+                <a href="blog.html" class="back-btn">← 블로그 목록으로 돌아가기</a>
+                
+                <div class="blog-detail-content">
+                    <div class="blog-info">
+                        <h1 id="blog-detail-title"></h1>
+                        <div class="blog-meta">
+                            <p id="blog-detail-category"></p>
+                            <p id="blog-detail-date"></p>
+                        </div>
+                    </div>
+
+                    <div class="blog-image-container">
+                        <img id="blog-detail-image" src="" alt="" />
+                    </div>
+
+                    <div class="blog-content">
+                        <div class="blog-description">
+                            <h2>글 소개</h2>
+                            <p id="blog-detail-description"></p>
+                        </div>
+
+                        <div class="blog-main-content">
+                            <h2>본문</h2>
+                            <p id="blog-detail-content"></p>
+                        </div>
+
+                        <div class="blog-info-detail">
+                            <h3>글 정보</h3>
+                            <p id="blog-detail-readtime"></p>
+                            <p id="blog-detail-views"></p>
+                            <div id="blog-detail-tags"></div>
+                        </div>
                     </div>
                 </div>
             </div>

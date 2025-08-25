@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Characters - 창작자 개인 홈페이지</title>
     
-    <!-- CSS 파일들 -->
- <link rel="stylesheet" href="/page/css/base.css">
-    <link rel="stylesheet" href="/page/css/components.css">
-    <link rel="stylesheet" href="/page/css/pages.css">
+    <!-- CSS 파일들 - 경로 수정됨 -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
     <!-- 페이지 전환 효과 -->
@@ -19,14 +19,14 @@
 
     <!-- 메인 내용 -->
     <main class="main-content">
-        <section class="section active">
+        <!-- 캐릭터 목록 섹션 -->
+        <section id="character-list-section" class="section active">
             <div class="content-container">
                 <div class="section-header">
                     <h1 class="page-title">Characters</h1>
                     <p class="page-subtitle">이 세계를 만들어가는 특별한 인물들을 만나보세요</p>
                 </div>
 
-                <!-- 👈 이 div가 중요해요! JavaScript가 여기를 찾아요 -->
                 <div id="character-grid" class="character-grid">
                     <div style="color: white; text-align: center; padding: 50px;">
                         캐릭터를 불러오는 중...
@@ -34,11 +34,51 @@
                 </div>
             </div>
         </section>
+
+        <!-- 캐릭터 상세 섹션 -->
+        <section id="character-detail-section" class="section">
+            <div class="content-container">
+                <a href="character.html" class="back-btn">← 캐릭터 목록으로 돌아가기</a>
+                
+                <div class="character-detail-content">
+                    <div class="character-image-container">
+                        <img id="character-detail-image" src="" alt="" />
+                    </div>
+                    
+                    <div class="character-info">
+                        <h1 id="character-detail-name"></h1>
+                        <p id="character-detail-title"></p>
+                        <p id="character-detail-description"></p>
+                        
+                        <div class="character-story">
+                            <h2>캐릭터 스토리</h2>
+                            <p id="character-detail-story"></p>
+                        </div>
+                        
+                        <div class="character-stats">
+                            <h3>능력치</h3>
+                            <div class="stat-row">
+                                <span>전투력</span>
+                                <div class="stat-dots" id="combat-stats"></div>
+                            </div>
+                            <div class="stat-row">
+                                <span>마법력</span>
+                                <div class="stat-dots" id="magic-stats"></div>
+                            </div>
+                            <div class="stat-row">
+                                <span>지혜</span>
+                                <div class="stat-dots" id="wisdom-stats"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- JavaScript 파일들 - 순서 중요! -->
-    <script src="/page/data/data.js"></script>
-    <script src="/page/js/core.js"></script>
-    <script src="/page/js/pages.js"></script>
+    <!-- JavaScript 파일들 - 경로 수정됨 -->
+    <script src="data/data.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/pages.js"></script>
 </body>
 </html>

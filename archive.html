@@ -14,17 +14,57 @@
     <nav class="navbar"></nav>
 
     <main class="main-content">
-        <section class="section active">
+        <!-- 아카이브 목록 섹션 -->
+        <section id="archive-list-section" class="section active">
             <div class="content-container">
                 <div class="section-header">
                     <h1 class="page-title">Archive</h1>
                     <p class="page-subtitle">창작한 작품들을 모아둔 공간입니다</p>
                 </div>
 
-                <!-- 👈 이 div ID가 중요해요! -->
                 <div id="archive-grid" class="archive-grid">
                     <div style="color: white; text-align: center; padding: 50px;">
                         작품을 불러오는 중...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 아카이브 상세 섹션 -->
+        <section id="archive-detail-section" class="section">
+            <div class="content-container">
+                <a href="archive.html" class="back-btn">← 아카이브 목록으로 돌아가기</a>
+                
+                <div class="archive-detail-content">
+                    <div class="archive-info">
+                        <h1 id="archive-detail-title"></h1>
+                        <div class="archive-meta">
+                            <p id="archive-detail-type"></p>
+                            <p id="archive-detail-date"></p>
+                        </div>
+                    </div>
+
+                    <div class="archive-image-container">
+                        <img id="archive-detail-image" src="" alt="" />
+                    </div>
+
+                    <div class="archive-content">
+                        <div class="archive-description">
+                            <h2>작품 소개</h2>
+                            <p id="archive-detail-description"></p>
+                        </div>
+
+                        <div class="archive-details">
+                            <h2>상세 내용</h2>
+                            <p id="archive-detail-details"></p>
+                        </div>
+
+                        <div class="archive-info-detail">
+                            <h3>작품 정보</h3>
+                            <p id="archive-detail-genre"></p>
+                            <p id="archive-detail-duration"></p>
+                            <p id="archive-detail-tools"></p>
+                        </div>
                     </div>
                 </div>
             </div>

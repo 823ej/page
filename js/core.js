@@ -298,10 +298,9 @@ App.components = {
       
       item.appendChild(img);
       
-      // 클릭 이벤트
+      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
       item.addEventListener('click', () => {
-        const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
-        alert(message);
+        App.utils.navigateToPage(`character.html?id=${character.id}`);
       });
       
       grid.appendChild(item);
@@ -315,6 +314,76 @@ App.components = {
     });
     
     console.log('✅ 모든 캐릭터 생성 완료!');
+  },
+
+  // 캐릭터 상세 페이지 생성
+  createCharacterDetail(characterId) {
+    console.log('👤 캐릭터 상세 페이지 생성:', characterId);
+    
+    const character = App.data.characters.find(c => c.id === parseInt(characterId));
+    if (!character) {
+      console.error('❌ 캐릭터를 찾을 수 없습니다:', characterId);
+      return;
+    }
+
+    // 섹션 전환
+    document.getElementById('character-list-section').classList.remove('active');
+    document.getElementById('character-detail-section').classList.add('active');
+
+    // 상세 정보 채우기
+    document.getElementById('character-detail-name').textContent = character.name;
+    document.getElementById('character-detail-title').textContent = character.title;
+    document.getElementById('character-detail-description').textContent = character.description;
+    document.getElementById('character-detail-story').textContent = character.story;
+    
+    const detailImage = document.getElementById('character-detail-image');
+    detailImage.src = character.fullImage || character.image;
+    detailImage.alt = character.name;
+
+    // 능력치 표시
+    this.createStatDots('combat-stats', character.stats.combat);
+    this.createStatDots('magic-stats', character.stats.magic, 'cyan');
+    this.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
+
+    // 애니메이션 적용
+    const contentContainer = document.querySelector('.content-container');
+    const characterDetailContent = document.querySelector('.character-detail-content');
+    const characterImageContainer = document.querySelector('.character-image-container');
+    const characterInfo = document.querySelector('.character-info');
+    
+    if (contentContainer) contentContainer.classList.add('visible');
+    if (characterDetailContent) {
+      setTimeout(() => characterDetailContent.classList.add('visible'), 100);
+    }
+    if (characterImageContainer) {
+      setTimeout(() => characterImageContainer.classList.add('visible'), 200);
+    }
+    if (characterInfo) {
+      setTimeout(() => characterInfo.classList.add('visible'), 300);
+    }
+
+    console.log('✅ 캐릭터 상세 페이지 생성 완료:', character.name);
+  },
+
+  // 능력치 점수 표시
+  createStatDots(containerId, value, color = 'blue') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    for (let i = 1; i <= 5; i++) {
+      const dot = App.utils.createElement('div', 'dot');
+      if (i <= value) {
+        dot.classList.add('active', color);
+      }
+      container.appendChild(dot);
+      
+      // 순차적 애니메이션
+      setTimeout(() => {
+        dot.classList.add('visible');
+      }, 400 + (i * 100));
+    }
   },
 
   // 아카이브 그리드 생성
@@ -351,10 +420,9 @@ App.components = {
       item.appendChild(imageDiv);
       item.appendChild(info);
       
-      // 클릭 이벤트
+      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
       item.addEventListener('click', () => {
-        const message = `${archive.title}\n\n${archive.description}\n\n종류: ${archive.type}\n날짜: ${archive.date}`;
-        alert(message);
+        App.utils.navigateToPage(`archive.html?id=${archive.id}`);
       });
       
       grid.appendChild(item);
@@ -364,6 +432,62 @@ App.components = {
       item.style.opacity = '1';
       item.style.transform = 'translateY(0)';
     });
+  },
+
+  // 아카이브 상세 페이지 생성
+  createArchiveDetail(archiveId) {
+    console.log('📁 아카이브 상세 페이지 생성:', archiveId);
+    
+    const archive = App.data.archives.find(a => a.id === parseInt(archiveId));
+    if (!archive) {
+      console.error('❌ 아카이브를 찾을 수 없습니다:', archiveId);
+      return;
+    }
+
+    // 섹션 전환
+    document.getElementById('archive-list-section').classList.remove('active');
+    document.getElementById('archive-detail-section').classList.add('active');
+
+    // 상세 정보 채우기
+    document.getElementById('archive-detail-title').textContent = archive.title;
+    document.getElementById('archive-detail-type').textContent = archive.type;
+    document.getElementById('archive-detail-date').textContent = archive.date;
+    document.getElementById('archive-detail-description').textContent = archive.description;
+    document.getElementById('archive-detail-details').textContent = archive.details;
+    
+    // 추가 정보가 있는 경우
+    if (archive.genre) {
+      document.getElementById('archive-detail-genre').textContent = `장르: ${archive.genre}`;
+    }
+    if (archive.duration) {
+      document.getElementById('archive-detail-duration').textContent = `제작 기간: ${archive.duration}`;
+    }
+    if (archive.tools) {
+      document.getElementById('archive-detail-tools').textContent = `제작 도구: ${archive.tools}`;
+    }
+    
+    const detailImage = document.getElementById('archive-detail-image');
+    detailImage.src = archive.fullImage || archive.image;
+    detailImage.alt = archive.title;
+
+    // 애니메이션 적용
+    const contentContainer = document.querySelector('.content-container');
+    const archiveDetailContent = document.querySelector('.archive-detail-content');
+    const archiveImageContainer = document.querySelector('.archive-image-container');
+    const archiveContent = document.querySelector('.archive-content');
+    
+    if (contentContainer) contentContainer.classList.add('visible');
+    if (archiveDetailContent) {
+      setTimeout(() => archiveDetailContent.classList.add('visible'), 100);
+    }
+    if (archiveImageContainer) {
+      setTimeout(() => archiveImageContainer.classList.add('visible'), 200);
+    }
+    if (archiveContent) {
+      setTimeout(() => archiveContent.classList.add('visible'), 300);
+    }
+
+    console.log('✅ 아카이브 상세 페이지 생성 완료:', archive.title);
   },
 
   // 블로그 리스트 생성
@@ -397,10 +521,9 @@ App.components = {
       content.appendChild(meta);
       item.appendChild(content);
       
-      // 클릭 이벤트
+      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
       item.addEventListener('click', () => {
-        const message = `${post.title}\n\n${post.description}\n\n카테고리: ${post.category}\n작성일: ${post.date}`;
-        alert(message);
+        App.utils.navigateToPage(`blog.html?id=${post.id}`);
       });
       
       list.appendChild(item);
@@ -409,6 +532,65 @@ App.components = {
       item.style.opacity = '1';
       item.style.transform = 'translateX(0)';
     });
+  },
+
+  // 블로그 상세 페이지 생성
+  createBlogDetail(blogId) {
+    console.log('📝 블로그 상세 페이지 생성:', blogId);
+    
+    const post = App.data.blogPosts.find(p => p.id === parseInt(blogId));
+    if (!post) {
+      console.error('❌ 블로그 포스트를 찾을 수 없습니다:', blogId);
+      return;
+    }
+
+    // 섹션 전환
+    document.getElementById('blog-list-section').classList.remove('active');
+    document.getElementById('blog-detail-section').classList.add('active');
+
+    // 상세 정보 채우기
+    document.getElementById('blog-detail-title').textContent = post.title;
+    document.getElementById('blog-detail-category').textContent = post.category;
+    document.getElementById('blog-detail-date').textContent = post.date;
+    document.getElementById('blog-detail-description').textContent = post.description;
+    document.getElementById('blog-detail-content').textContent = post.content;
+    
+    // 추가 정보가 있는 경우
+    if (post.readTime) {
+      document.getElementById('blog-detail-readtime').textContent = `읽는 시간: ${post.readTime}`;
+    }
+    if (post.views) {
+      document.getElementById('blog-detail-views').textContent = `조회수: ${post.views}`;
+    }
+    
+    // 태그 표시
+    const tagsContainer = document.getElementById('blog-detail-tags');
+    if (post.tags && post.tags.length > 0) {
+      tagsContainer.innerHTML = '<strong>태그:</strong> ' + post.tags.join(', ');
+    }
+    
+    const detailImage = document.getElementById('blog-detail-image');
+    detailImage.src = post.fullImage || post.image;
+    detailImage.alt = post.title;
+
+    // 애니메이션 적용
+    const contentContainer = document.querySelector('.content-container');
+    const blogDetailContent = document.querySelector('.blog-detail-content');
+    const blogImageContainer = document.querySelector('.blog-image-container');
+    const blogContent = document.querySelector('.blog-content');
+    
+    if (contentContainer) contentContainer.classList.add('visible');
+    if (blogDetailContent) {
+      setTimeout(() => blogDetailContent.classList.add('visible'), 100);
+    }
+    if (blogImageContainer) {
+      setTimeout(() => blogImageContainer.classList.add('visible'), 200);
+    }
+    if (blogContent) {
+      setTimeout(() => blogContent.classList.add('visible'), 300);
+    }
+
+    console.log('✅ 블로그 상세 페이지 생성 완료:', post.title);
   }
 };
 
@@ -436,11 +618,32 @@ App.init = async function() {
   
   // 페이지별 콘텐츠 생성
   if (currentPage === 'character.html') {
-    App.components.createCharacterGrid();
+    const urlParams = App.utils.getUrlParams();
+    if (urlParams.id) {
+      // 캐릭터 상세 페이지
+      App.components.createCharacterDetail(urlParams.id);
+    } else {
+      // 캐릭터 목록 페이지
+      App.components.createCharacterGrid();
+    }
   } else if (currentPage === 'archive.html') {
-    App.components.createArchiveGrid();
+    const urlParams = App.utils.getUrlParams();
+    if (urlParams.id) {
+      // 아카이브 상세 페이지
+      App.components.createArchiveDetail(urlParams.id);
+    } else {
+      // 아카이브 목록 페이지
+      App.components.createArchiveGrid();
+    }
   } else if (currentPage === 'blog.html') {
-    App.components.createBlogList();
+    const urlParams = App.utils.getUrlParams();
+    if (urlParams.id) {
+      // 블로그 상세 페이지
+      App.components.createBlogDetail(urlParams.id);
+    } else {
+      // 블로그 목록 페이지
+      App.components.createBlogList();
+    }
   } else if (currentPage === 'introduction.html') {
     // Introduction 페이지 - 전용 초기화 함수 사용
     App.components.initIntroPage();
