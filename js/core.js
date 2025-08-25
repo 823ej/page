@@ -74,46 +74,61 @@ App.utils = {
 // 컴포넌트 시스템
 App.components = {
   // 기본 페이지 초기화
-initBasicPage() {
-  console.log('📄 기본 페이지 초기화...');
-  
-  const contentContainer = document.querySelector('.content-container');
-  const pageTitle = document.querySelector('.page-title');
-  const pageSubtitle = document.querySelector('.page-subtitle');
-  
-  if (contentContainer) {
-    setTimeout(() => contentContainer.classList.add('visible'), 100);
-  }
-  if (pageTitle) {
-    setTimeout(() => pageTitle.classList.add('visible'), 200);
-  }
-  if (pageSubtitle) {
-    setTimeout(() => pageSubtitle.classList.add('visible'), 300);
-  }
-},
+  initBasicPage() {
+    console.log('📄 기본 페이지 초기화...');
+    
+    const contentContainer = document.querySelector('.content-container');
+    const pageTitle = document.querySelector('.page-title');
+    const pageSubtitle = document.querySelector('.page-subtitle');
+    
+    if (contentContainer) {
+      setTimeout(() => contentContainer.classList.add('visible'), 100);
+    }
+    if (pageTitle) {
+      setTimeout(() => pageTitle.classList.add('visible'), 200);
+    }
+    if (pageSubtitle) {
+      setTimeout(() => pageSubtitle.classList.add('visible'), 300);
+    }
+  },
 
-  // 배경 버블 생성 (추가할 함수)
-createBackgroundBubbles() {
-  const container = document.createElement('div');
-  container.id = 'background-bubbles';
-  
-  for (let i = 0; i < 15; i++) {
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    const size = Math.random() * 20 + 10;
+  // 메인 페이지 초기화 (누락된 함수 추가!)
+  initMainPage() {
+    console.log('🏠 메인 페이지 초기화...');
     
-    bubble.style.left = Math.random() * 100 + '%';
-    bubble.style.width = size + 'px';
-    bubble.style.height = size + 'px';
-    bubble.style.animationDuration = (Math.random() * 15 + 15) + 's';
-    bubble.style.animationDelay = (Math.random() * -15) + 's';
+    const mainImageContainer = document.querySelector('.main-image-container');
     
-    container.appendChild(bubble);
-  }
-  
-  document.body.insertBefore(container, document.body.firstChild);
-  console.log('🫧 물거품 효과 추가됨!');
-},
+    if (mainImageContainer) {
+      setTimeout(() => {
+        mainImageContainer.classList.add('visible');
+        console.log('✅ 메인 이미지 애니메이션 시작!');
+      }, 300);
+    }
+  },
+
+  // 배경 버블 생성
+  createBackgroundBubbles() {
+    const container = document.createElement('div');
+    container.id = 'background-bubbles';
+    
+    for (let i = 0; i < 15; i++) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = Math.random() * 20 + 10;
+      
+      bubble.style.left = Math.random() * 100 + '%';
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.animationDuration = (Math.random() * 15 + 15) + 's';
+      bubble.style.animationDelay = (Math.random() * -15) + 's';
+      
+      container.appendChild(bubble);
+    }
+    
+    document.body.insertBefore(container, document.body.firstChild);
+    console.log('🫧 물거품 효과 추가됨!');
+  },
+
   // 네비게이션 생성
   createNavigation(activePage) {
     const nav = document.querySelector('.navbar');
@@ -153,75 +168,74 @@ createBackgroundBubbles() {
   },
 
   // 캐릭터 그리드 생성
-createCharacterGrid() {
-  console.log('🔍 캐릭터 그리드 함수 실행됨!');
-  
-  const grid = document.getElementById('character-grid');
-  if (!grid || !App.data) {
-    console.log('❌ Grid나 데이터가 없음');
-    return;
-// 👈 이 부분들 추가!
-  // 페이지 요소들을 보이게 만들기
-  const contentContainer = document.querySelector('.content-container');
-  const pageTitle = document.querySelector('.page-title');
-  const pageSubtitle = document.querySelector('.page-subtitle');
-  
-  if (contentContainer) {
-    setTimeout(() => contentContainer.classList.add('visible'), 100);
-  }
-  if (pageTitle) {
-    setTimeout(() => pageTitle.classList.add('visible'), 200);
-  }
-  if (pageSubtitle) {
-    setTimeout(() => pageSubtitle.classList.add('visible'), 300);
-  }
+  createCharacterGrid() {
+    console.log('🔍 캐릭터 그리드 함수 실행됨!');
+    
+    const grid = document.getElementById('character-grid');
+    if (!grid || !App.data) {
+      console.log('❌ Grid나 데이터가 없음');
+      return;
+    }
 
-  }
-  
-  console.log('✅ 캐릭터 생성 시작');
-  grid.innerHTML = '';
-  
-  App.data.characters.forEach((character, index) => {
-    const item = App.utils.createElement('div', 'character-item');
+    // 페이지 요소들을 보이게 만들기
+    const contentContainer = document.querySelector('.content-container');
+    const pageTitle = document.querySelector('.page-title');
+    const pageSubtitle = document.querySelector('.page-subtitle');
     
-    const img = App.utils.createElement('img');
-    img.src = character.image;
-    img.alt = character.name;
+    if (contentContainer) {
+      setTimeout(() => contentContainer.classList.add('visible'), 100);
+    }
+    if (pageTitle) {
+      setTimeout(() => pageTitle.classList.add('visible'), 200);
+    }
+    if (pageSubtitle) {
+      setTimeout(() => pageSubtitle.classList.add('visible'), 300);
+    }
     
-    item.appendChild(img);
+    console.log('✅ 캐릭터 생성 시작');
+    grid.innerHTML = '';
     
-    // 클릭 이벤트
-    item.addEventListener('click', () => {
-      const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
-      alert(message);
+    App.data.characters.forEach((character, index) => {
+      const item = App.utils.createElement('div', 'character-item');
+      
+      const img = App.utils.createElement('img');
+      img.src = character.image;
+      img.alt = character.name;
+      
+      item.appendChild(img);
+      
+      // 클릭 이벤트
+      item.addEventListener('click', () => {
+        const message = `${character.name} - ${character.title}\n\n${character.description}\n\n${character.story}`;
+        alert(message);
+      });
+      
+      grid.appendChild(item);
+      
+      // 캐릭터 아이템 바로 보이게 하기
+      item.classList.add('visible');
+      item.style.opacity = '1';
+      item.style.transform = 'translateY(0)';
+      
+      console.log(`캐릭터 ${index + 1} 생성:`, character.name);
     });
     
-    grid.appendChild(item);
-    
-    // 캐릭터 아이템 바로 보이게 하기
-    item.classList.add('visible');
-    item.style.opacity = '1';
-    item.style.transform = 'translateY(0)';
-    
-    console.log(`캐릭터 ${index + 1} 생성:`, character.name);
-  });
-  
-  console.log('✅ 모든 캐릭터 생성 완료!');
-},
+    console.log('✅ 모든 캐릭터 생성 완료!');
+  },
 
   // 아카이브 그리드 생성
   createArchiveGrid() {
     const grid = document.getElementById('archive-grid');
     if (!grid || !App.data) return;
     
-      // 페이지 요소들 보이게 하기
-  const contentContainer = document.querySelector('.content-container');
-  const pageTitle = document.querySelector('.page-title');
-  const pageSubtitle = document.querySelector('.page-subtitle');
-  
-  if (contentContainer) contentContainer.classList.add('visible');
-  if (pageTitle) pageTitle.classList.add('visible');
-  if (pageSubtitle) pageSubtitle.classList.add('visible');
+    // 페이지 요소들 보이게 하기
+    const contentContainer = document.querySelector('.content-container');
+    const pageTitle = document.querySelector('.page-title');
+    const pageSubtitle = document.querySelector('.page-subtitle');
+    
+    if (contentContainer) contentContainer.classList.add('visible');
+    if (pageTitle) pageTitle.classList.add('visible');
+    if (pageSubtitle) pageSubtitle.classList.add('visible');
 
     grid.innerHTML = '';
     
@@ -263,14 +277,14 @@ createCharacterGrid() {
     const list = document.getElementById('blog-list');
     if (!list || !App.data) return;
 
-     // 페이지 요소들 보이게 하기  
-  const contentContainer = document.querySelector('.content-container');
-  const pageTitle = document.querySelector('.page-title');
-  const pageSubtitle = document.querySelector('.page-subtitle');
-  
-  if (contentContainer) contentContainer.classList.add('visible');
-  if (pageTitle) pageTitle.classList.add('visible');
-  if (pageSubtitle) pageSubtitle.classList.add('visible');
+    // 페이지 요소들 보이게 하기  
+    const contentContainer = document.querySelector('.content-container');
+    const pageTitle = document.querySelector('.page-title');
+    const pageSubtitle = document.querySelector('.page-subtitle');
+    
+    if (contentContainer) contentContainer.classList.add('visible');
+    if (pageTitle) pageTitle.classList.add('visible');
+    if (pageSubtitle) pageSubtitle.classList.add('visible');
     
     list.innerHTML = '';
     
@@ -320,28 +334,29 @@ App.init = async function() {
   const currentPage = App.utils.getCurrentPage();
   console.log('📄 현재 페이지:', currentPage);
 
- // 🫧 물거품 효과 추가 (여기에 추가!)
+  // 🫧 물거품 효과 추가
   App.components.createBackgroundBubbles();
   
   // 네비게이션 생성
   App.components.createNavigation(currentPage);
   
   // 페이지별 콘텐츠 생성
-if (currentPage === 'character.html') {
-  App.components.createCharacterGrid();
-} else if (currentPage === 'archive.html') {
-  App.components.createArchiveGrid();
-} else if (currentPage === 'blog.html') {
-  App.components.createBlogList();
-} else if (currentPage === 'introduction.html') {
-  // Introduction 페이지 - 기본 애니메이션만
-  App.components.initBasicPage();
-} else if (currentPage === 'world.html') {
-  // World 페이지 - 기본 애니메이션만
-  App.components.initBasicPage();
-} else if (currentPage === 'index.html' || currentPage === '') {
-  App.components.initMainPage();
-}
+  if (currentPage === 'character.html') {
+    App.components.createCharacterGrid();
+  } else if (currentPage === 'archive.html') {
+    App.components.createArchiveGrid();
+  } else if (currentPage === 'blog.html') {
+    App.components.createBlogList();
+  } else if (currentPage === 'introduction.html') {
+    // Introduction 페이지 - 기본 애니메이션만
+    App.components.initBasicPage();
+  } else if (currentPage === 'world.html') {
+    // World 페이지 - 기본 애니메이션만
+    App.components.initBasicPage();
+  } else if (currentPage === 'index.html' || currentPage === '') {
+    // 메인 페이지 초기화
+    App.components.initMainPage();
+  }
   
   // 공통 기능 설정
   App.setupCommonFeatures();
