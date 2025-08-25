@@ -46,12 +46,15 @@ App.utils = {
   },
 
   // 현재 페이지 이름 가져오기
-  getCurrentPage() {
-    const page = window.location.pathname.split('/').pop() || 'index.html';
-    console.log('📄 현재 페이지:', page);
-    return page;
+  getCurrentDir() {
+   // pathname 예: "/page", "/page/", "/page/character.html"
+    const segments = window.location.pathname.split('/');
+    // segments[1] 은 항상 "page" 입니다.
+    const base = segments[1];
+    // 결과: "/page/" 처럼 항상 슬래시로 끝나는 경로
+    return '/' + base + '/';
   },
-
+  
   // 페이지 전환 - 단순화된 버전
   navigateToPage(url) {
     console.log('🚀 페이지 이동:', url);
@@ -303,8 +306,7 @@ App.components = {
 
 // 캐릭터 그리드에서
       item.addEventListener('click', () => {
-      const dir = App.utils.getCurrentDir();
-      window.location.href = `${dir}character.html?id=${character.id}`;
+      const dir = App.utils.getCurrentDir(); window.location.href = dir + 'character.html?id=' + character.id;
     });
       
       grid.appendChild(item);
@@ -480,8 +482,7 @@ App.components = {
       
       // 아카이브 목록에서
 item.addEventListener('click', () => {
-  const dir = App.utils.getCurrentDir();
-  window.location.href = `${dir}archive.html?id=${archive.id}`;
+  const dir = App.utils.getCurrentDir(); window.location.href = dir + 'archive.html?id=' + archive.id;
 });
 
       
@@ -590,8 +591,7 @@ item.addEventListener('click', () => {
       
       // 블로그 목록에서
       item.addEventListener('click', () => {
-      const dir = App.utils.getCurrentDir();
-      window.location.href = `${dir}blog.html?id=${post.id}`;
+      const dir = App.utils.getCurrentDir(); window.location.href = dir + 'blog.html?id=' + post.id;
     });
       
       list.appendChild(item);
