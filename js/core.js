@@ -392,19 +392,19 @@ App.components = {
       return;
     }
 
-    // 섹션 전환 - 강제 표시
+    // 섹션 전환 - !important 사용하여 강제 표시
     console.log('🔄 섹션 전환 시작...');
     listSection.classList.remove('active');
-    listSection.style.display = 'none';
-    listSection.style.opacity = '0';
+    listSection.style.setProperty('display', 'none', 'important');
+    listSection.style.setProperty('opacity', '0', 'important');
     
     detailSection.classList.add('active');
-    detailSection.style.display = 'block';
-    detailSection.style.opacity = '1';
-    detailSection.style.visibility = 'visible';
-    detailSection.style.position = 'relative';
-    detailSection.style.zIndex = '10';
-    console.log('✅ 섹션 전환 완료 (강제 표시)');
+    detailSection.style.setProperty('display', 'block', 'important');
+    detailSection.style.setProperty('opacity', '1', 'important');
+    detailSection.style.setProperty('visibility', 'visible', 'important');
+    detailSection.style.setProperty('position', 'relative', 'important');
+    detailSection.style.setProperty('z-index', '10', 'important');
+    console.log('✅ 섹션 전환 완료 (!important 강제 표시)');
 
     // 상세 정보 채우기
     const elements = {
@@ -450,7 +450,7 @@ App.components = {
       App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
     }
 
-    // 강제 표시 - 모든 관련 요소들
+    // 강제 표시 - !important 사용
     const contentContainer = document.querySelector('.content-container');
     const characterDetailContent = document.querySelector('.character-detail-content');
     const characterImageContainer = document.querySelector('.character-image-container');
@@ -458,45 +458,77 @@ App.components = {
 
     if (contentContainer) {
       contentContainer.classList.add('visible');
-      contentContainer.style.opacity = '1';
-      contentContainer.style.transform = 'translateY(0)';
-      contentContainer.style.display = 'block';
-      contentContainer.style.visibility = 'visible';
+      contentContainer.style.setProperty('opacity', '1', 'important');
+      contentContainer.style.setProperty('transform', 'translateY(0)', 'important');
+      contentContainer.style.setProperty('display', 'block', 'important');
+      contentContainer.style.setProperty('visibility', 'visible', 'important');
     }
     if (characterDetailContent) {
       characterDetailContent.classList.add('visible');
-      characterDetailContent.style.opacity = '1';
-      characterDetailContent.style.transform = 'translateY(0)';
-      characterDetailContent.style.display = 'block';
-      characterDetailContent.style.visibility = 'visible';
+      characterDetailContent.style.setProperty('opacity', '1', 'important');
+      characterDetailContent.style.setProperty('transform', 'translateY(0)', 'important');
+      characterDetailContent.style.setProperty('display', 'block', 'important');
+      characterDetailContent.style.setProperty('visibility', 'visible', 'important');
     }
     if (characterImageContainer) {
       characterImageContainer.classList.add('visible');
-      characterImageContainer.style.opacity = '1';
-      characterImageContainer.style.transform = 'translateX(0)';
-      characterImageContainer.style.display = 'block';
-      characterImageContainer.style.visibility = 'visible';
+      characterImageContainer.style.setProperty('opacity', '1', 'important');
+      characterImageContainer.style.setProperty('transform', 'translateX(0)', 'important');
+      characterImageContainer.style.setProperty('display', 'block', 'important');
+      characterImageContainer.style.setProperty('visibility', 'visible', 'important');
     }
     if (characterInfo) {
       characterInfo.classList.add('visible');
-      characterInfo.style.opacity = '1';
-      characterInfo.style.transform = 'translateX(0)';
-      characterInfo.style.display = 'block';
-      characterInfo.style.visibility = 'visible';
+      characterInfo.style.setProperty('opacity', '1', 'important');
+      characterInfo.style.setProperty('transform', 'translateX(0)', 'important');
+      characterInfo.style.setProperty('display', 'block', 'important');
+      characterInfo.style.setProperty('visibility', 'visible', 'important');
     }
 
     console.log('🎉 캐릭터 상세 페이지 생성 완료:', character.name);
     
-    // 추가 디버깅: 요소들의 실제 상태 확인
-    console.log('🔍 최종 상태 확인:');
-    console.log('  - detailSection display:', detailSection.style.display);
-    console.log('  - detailSection opacity:', detailSection.style.opacity);
-    console.log('  - detailSection visibility:', detailSection.style.visibility);
+    // 강력한 디버깅: 모든 요소들의 실제 상태 확인
+    console.log('🔍 최종 상태 상세 확인:');
+    console.log('  - listSection display:', listSection ? listSection.style.display : 'null');
+    console.log('  - detailSection display:', detailSection ? detailSection.style.display : 'null');
+    console.log('  - detailSection opacity:', detailSection ? detailSection.style.opacity : 'null');
+    console.log('  - detailSection visibility:', detailSection ? detailSection.style.visibility : 'null');
+    console.log('  - detailSection classList:', detailSection ? Array.from(detailSection.classList) : 'null');
+    console.log('  - detailSection offsetHeight:', detailSection ? detailSection.offsetHeight : 'null');
+    console.log('  - detailSection offsetWidth:', detailSection ? detailSection.offsetWidth : 'null');
+    
+    // HTML 요소들이 실제로 있는지 확인
+    console.log('🔍 HTML 요소 존재 확인:');
+    console.log('  - character-detail-name:', !!document.getElementById('character-detail-name'));
+    console.log('  - character-detail-title:', !!document.getElementById('character-detail-title'));
+    console.log('  - character-detail-image:', !!document.getElementById('character-detail-image'));
     
     // 페이지 강제 스크롤 위로
     window.scrollTo(0, 0);
     
-    alert(`${character.name} 페이지가 로드되었습니다!`); // 성공 확인용
+    // DOM 조작 완료 후 잠시 기다린 다음 한 번 더 강제 설정
+    setTimeout(() => {
+      console.log('⏰ 0.5초 후 재시도...');
+      if (detailSection) {
+        detailSection.style.setProperty('display', 'block', 'important');
+        detailSection.style.setProperty('opacity', '1', 'important');
+        detailSection.style.setProperty('visibility', 'visible', 'important');
+        detailSection.style.setProperty('height', 'auto', 'important');
+        detailSection.style.setProperty('width', '100%', 'important');
+        detailSection.style.setProperty('position', 'relative', 'important');
+        detailSection.style.setProperty('z-index', '999', 'important');
+        
+        console.log('🔄 재시도 후 상태:', {
+          display: detailSection.style.display,
+          opacity: detailSection.style.opacity,
+          visibility: detailSection.style.visibility,
+          height: detailSection.offsetHeight,
+          width: detailSection.offsetWidth
+        });
+      }
+    }, 500);
+    
+    alert(`${character.name} 페이지가 로드되었습니다!\n콘솔에서 디버그 정보를 확인해주세요.`); // 성공 확인용
   },
 
   // 능력치 점수 표시 - 애니메이션 단순화
@@ -628,22 +660,22 @@ App.components = {
 
     console.log('✅ 아카이브 데이터:', archive);
 
-    // 섹션 전환 - 강제 표시
+    // 섹션 전환 - !important 사용하여 강제 표시
     const listSection = document.getElementById('archive-list-section');
     const detailSection = document.getElementById('archive-detail-section');
     
     if (listSection) {
       listSection.classList.remove('active');
-      listSection.style.display = 'none';
-      listSection.style.opacity = '0';
+      listSection.style.setProperty('display', 'none', 'important');
+      listSection.style.setProperty('opacity', '0', 'important');
     }
     if (detailSection) {
       detailSection.classList.add('active');
-      detailSection.style.display = 'block';
-      detailSection.style.opacity = '1';
-      detailSection.style.visibility = 'visible';
-      detailSection.style.position = 'relative';
-      detailSection.style.zIndex = '10';
+      detailSection.style.setProperty('display', 'block', 'important');
+      detailSection.style.setProperty('opacity', '1', 'important');
+      detailSection.style.setProperty('visibility', 'visible', 'important');
+      detailSection.style.setProperty('position', 'relative', 'important');
+      detailSection.style.setProperty('z-index', '10', 'important');
     }
 
     // 상세 정보 채우기
@@ -681,23 +713,23 @@ App.components = {
       elements.image.alt = archive.title;
     }
 
-    // 강제 표시 - 모든 관련 요소들
+    // 강제 표시 - !important 사용
     const contentContainer = document.querySelector('.content-container');
     const detailContent = document.querySelector('.archive-detail-content');
     
     if (contentContainer) {
       contentContainer.classList.add('visible');
-      contentContainer.style.opacity = '1';
-      contentContainer.style.transform = 'translateY(0)';
-      contentContainer.style.display = 'block';
-      contentContainer.style.visibility = 'visible';
+      contentContainer.style.setProperty('opacity', '1', 'important');
+      contentContainer.style.setProperty('transform', 'translateY(0)', 'important');
+      contentContainer.style.setProperty('display', 'block', 'important');
+      contentContainer.style.setProperty('visibility', 'visible', 'important');
     }
     if (detailContent) {
       detailContent.classList.add('visible');
-      detailContent.style.opacity = '1';
-      detailContent.style.transform = 'translateY(0)';
-      detailContent.style.display = 'block';
-      detailContent.style.visibility = 'visible';
+      detailContent.style.setProperty('opacity', '1', 'important');
+      detailContent.style.setProperty('transform', 'translateY(0)', 'important');
+      detailContent.style.setProperty('display', 'block', 'important');
+      detailContent.style.setProperty('visibility', 'visible', 'important');
     }
 
     console.log('✅ 아카이브 상세 페이지 생성 완료:', archive.title);
@@ -797,22 +829,22 @@ App.components = {
 
     console.log('✅ 블로그 데이터:', post);
 
-    // 섹션 전환 - 강제 표시
+    // 섹션 전환 - !important 사용하여 강제 표시
     const listSection = document.getElementById('blog-list-section');
     const detailSection = document.getElementById('blog-detail-section');
     
     if (listSection) {
       listSection.classList.remove('active');
-      listSection.style.display = 'none';
-      listSection.style.opacity = '0';
+      listSection.style.setProperty('display', 'none', 'important');
+      listSection.style.setProperty('opacity', '0', 'important');
     }
     if (detailSection) {
       detailSection.classList.add('active');
-      detailSection.style.display = 'block';
-      detailSection.style.opacity = '1';
-      detailSection.style.visibility = 'visible';
-      detailSection.style.position = 'relative';
-      detailSection.style.zIndex = '10';
+      detailSection.style.setProperty('display', 'block', 'important');
+      detailSection.style.setProperty('opacity', '1', 'important');
+      detailSection.style.setProperty('visibility', 'visible', 'important');
+      detailSection.style.setProperty('position', 'relative', 'important');
+      detailSection.style.setProperty('z-index', '10', 'important');
     }
 
     // 상세 정보 채우기
@@ -850,23 +882,23 @@ App.components = {
       elements.image.alt = post.title;
     }
 
-    // 강제 표시 - 모든 관련 요소들
+    // 강제 표시 - !important 사용
     const contentContainer = document.querySelector('.content-container');
     const detailContent = document.querySelector('.blog-detail-content');
     
     if (contentContainer) {
       contentContainer.classList.add('visible');
-      contentContainer.style.opacity = '1';
-      contentContainer.style.transform = 'translateY(0)';
-      contentContainer.style.display = 'block';
-      contentContainer.style.visibility = 'visible';
+      contentContainer.style.setProperty('opacity', '1', 'important');
+      contentContainer.style.setProperty('transform', 'translateY(0)', 'important');
+      contentContainer.style.setProperty('display', 'block', 'important');
+      contentContainer.style.setProperty('visibility', 'visible', 'important');
     }
     if (detailContent) {
       detailContent.classList.add('visible');
-      detailContent.style.opacity = '1';
-      detailContent.style.transform = 'translateY(0)';
-      detailContent.style.display = 'block';
-      detailContent.style.visibility = 'visible';
+      detailContent.style.setProperty('opacity', '1', 'important');
+      detailContent.style.setProperty('transform', 'translateY(0)', 'important');
+      detailContent.style.setProperty('display', 'block', 'important');
+      detailContent.style.setProperty('visibility', 'visible', 'important');
     }
 
     console.log('✅ 블로그 상세 페이지 생성 완료:', post.title);
