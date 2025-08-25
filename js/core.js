@@ -392,14 +392,19 @@ App.components = {
       return;
     }
 
-    // 섹션 전환
+    // 섹션 전환 - 강제 표시
     console.log('🔄 섹션 전환 시작...');
     listSection.classList.remove('active');
     listSection.style.display = 'none';
+    listSection.style.opacity = '0';
     
     detailSection.classList.add('active');
     detailSection.style.display = 'block';
-    console.log('✅ 섹션 전환 완료');
+    detailSection.style.opacity = '1';
+    detailSection.style.visibility = 'visible';
+    detailSection.style.position = 'relative';
+    detailSection.style.zIndex = '10';
+    console.log('✅ 섹션 전환 완료 (강제 표시)');
 
     // 상세 정보 채우기
     const elements = {
@@ -445,7 +450,7 @@ App.components = {
       App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
     }
 
-    // 애니메이션 없이 바로 표시
+    // 강제 표시 - 모든 관련 요소들
     const contentContainer = document.querySelector('.content-container');
     const characterDetailContent = document.querySelector('.character-detail-content');
     const characterImageContainer = document.querySelector('.character-image-container');
@@ -455,24 +460,42 @@ App.components = {
       contentContainer.classList.add('visible');
       contentContainer.style.opacity = '1';
       contentContainer.style.transform = 'translateY(0)';
+      contentContainer.style.display = 'block';
+      contentContainer.style.visibility = 'visible';
     }
     if (characterDetailContent) {
       characterDetailContent.classList.add('visible');
       characterDetailContent.style.opacity = '1';
       characterDetailContent.style.transform = 'translateY(0)';
+      characterDetailContent.style.display = 'block';
+      characterDetailContent.style.visibility = 'visible';
     }
     if (characterImageContainer) {
       characterImageContainer.classList.add('visible');
       characterImageContainer.style.opacity = '1';
       characterImageContainer.style.transform = 'translateX(0)';
+      characterImageContainer.style.display = 'block';
+      characterImageContainer.style.visibility = 'visible';
     }
     if (characterInfo) {
       characterInfo.classList.add('visible');
       characterInfo.style.opacity = '1';
       characterInfo.style.transform = 'translateX(0)';
+      characterInfo.style.display = 'block';
+      characterInfo.style.visibility = 'visible';
     }
 
     console.log('🎉 캐릭터 상세 페이지 생성 완료:', character.name);
+    
+    // 추가 디버깅: 요소들의 실제 상태 확인
+    console.log('🔍 최종 상태 확인:');
+    console.log('  - detailSection display:', detailSection.style.display);
+    console.log('  - detailSection opacity:', detailSection.style.opacity);
+    console.log('  - detailSection visibility:', detailSection.style.visibility);
+    
+    // 페이지 강제 스크롤 위로
+    window.scrollTo(0, 0);
+    
     alert(`${character.name} 페이지가 로드되었습니다!`); // 성공 확인용
   },
 
@@ -605,17 +628,22 @@ App.components = {
 
     console.log('✅ 아카이브 데이터:', archive);
 
-    // 섹션 전환
+    // 섹션 전환 - 강제 표시
     const listSection = document.getElementById('archive-list-section');
     const detailSection = document.getElementById('archive-detail-section');
     
     if (listSection) {
       listSection.classList.remove('active');
       listSection.style.display = 'none';
+      listSection.style.opacity = '0';
     }
     if (detailSection) {
       detailSection.classList.add('active');
       detailSection.style.display = 'block';
+      detailSection.style.opacity = '1';
+      detailSection.style.visibility = 'visible';
+      detailSection.style.position = 'relative';
+      detailSection.style.zIndex = '10';
     }
 
     // 상세 정보 채우기
@@ -653,7 +681,7 @@ App.components = {
       elements.image.alt = archive.title;
     }
 
-    // 애니메이션 없이 바로 표시
+    // 강제 표시 - 모든 관련 요소들
     const contentContainer = document.querySelector('.content-container');
     const detailContent = document.querySelector('.archive-detail-content');
     
@@ -661,11 +689,15 @@ App.components = {
       contentContainer.classList.add('visible');
       contentContainer.style.opacity = '1';
       contentContainer.style.transform = 'translateY(0)';
+      contentContainer.style.display = 'block';
+      contentContainer.style.visibility = 'visible';
     }
     if (detailContent) {
       detailContent.classList.add('visible');
       detailContent.style.opacity = '1';
       detailContent.style.transform = 'translateY(0)';
+      detailContent.style.display = 'block';
+      detailContent.style.visibility = 'visible';
     }
 
     console.log('✅ 아카이브 상세 페이지 생성 완료:', archive.title);
@@ -765,17 +797,22 @@ App.components = {
 
     console.log('✅ 블로그 데이터:', post);
 
-    // 섹션 전환
+    // 섹션 전환 - 강제 표시
     const listSection = document.getElementById('blog-list-section');
     const detailSection = document.getElementById('blog-detail-section');
     
     if (listSection) {
       listSection.classList.remove('active');
       listSection.style.display = 'none';
+      listSection.style.opacity = '0';
     }
     if (detailSection) {
       detailSection.classList.add('active');
       detailSection.style.display = 'block';
+      detailSection.style.opacity = '1';
+      detailSection.style.visibility = 'visible';
+      detailSection.style.position = 'relative';
+      detailSection.style.zIndex = '10';
     }
 
     // 상세 정보 채우기
@@ -813,7 +850,7 @@ App.components = {
       elements.image.alt = post.title;
     }
 
-    // 애니메이션 없이 바로 표시
+    // 강제 표시 - 모든 관련 요소들
     const contentContainer = document.querySelector('.content-container');
     const detailContent = document.querySelector('.blog-detail-content');
     
@@ -821,11 +858,15 @@ App.components = {
       contentContainer.classList.add('visible');
       contentContainer.style.opacity = '1';
       contentContainer.style.transform = 'translateY(0)';
+      contentContainer.style.display = 'block';
+      contentContainer.style.visibility = 'visible';
     }
     if (detailContent) {
       detailContent.classList.add('visible');
       detailContent.style.opacity = '1';
       detailContent.style.transform = 'translateY(0)';
+      detailContent.style.display = 'block';
+      detailContent.style.visibility = 'visible';
     }
 
     console.log('✅ 블로그 상세 페이지 생성 완료:', post.title);
