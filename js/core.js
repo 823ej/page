@@ -46,19 +46,17 @@ App.utils = {
   },
 
   // 현재 페이지 파일 이름을 반환
-getCurrentPage() {
-  const page = window.location.pathname.split('/').pop() || 'index.html';
-  return page;
-},
+  getCurrentPage() {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    return page;
+  },
 
-  // 현재 페이지 이름 가져오기
-  getCurrentDir() {
-   // pathname 예: "/page", "/page/", "/page/character.html"
-    const segments = window.location.pathname.split('/');
-    // segments[1] 은 항상 "page" 입니다.
-    const base = segments[1];
-    // 결과: "/page/" 처럼 항상 슬래시로 끝나는 경로
-    return '/' + base + '/';
+  // 📍 수정된 함수: 단순하게 현재 위치 기준으로 상대 경로 생성
+  getBasePath() {
+    // 현재 경로에서 파일명만 제거하고 디렉토리 부분만 반환
+    const path = window.location.pathname;
+    const dir = path.substring(0, path.lastIndexOf('/') + 1);
+    return dir;
   },
   
   // 페이지 전환 - 단순화된 버전
@@ -305,11 +303,13 @@ App.components = {
       
       item.appendChild(img);
       
-
-// 캐릭터 그리드에서
+      // 📍 수정된 클릭 이벤트: 더 간단한 URL 생성
       item.addEventListener('click', () => {
-      const dir = App.utils.getCurrentDir(); window.location.href = dir + 'character.html?id=' + character.id;
-    });
+        const basePath = App.utils.getBasePath();
+        const newUrl = basePath + 'character.html?id=' + character.id;
+        console.log('🚀 캐릭터 클릭, 이동할 URL:', newUrl);
+        window.location.href = newUrl;
+      });
       
       grid.appendChild(item);
       
@@ -482,11 +482,13 @@ App.components = {
       item.appendChild(imageDiv);
       item.appendChild(info);
       
-      // 아카이브 목록에서
-item.addEventListener('click', () => {
-  const dir = App.utils.getCurrentDir(); window.location.href = dir + 'archive.html?id=' + archive.id;
-});
-
+      // 📍 수정된 클릭 이벤트: 더 간단한 URL 생성
+      item.addEventListener('click', () => {
+        const basePath = App.utils.getBasePath();
+        const newUrl = basePath + 'archive.html?id=' + archive.id;
+        console.log('🚀 아카이브 클릭, 이동할 URL:', newUrl);
+        window.location.href = newUrl;
+      });
       
       grid.appendChild(item);
       
@@ -527,7 +529,7 @@ item.addEventListener('click', () => {
     if (elements.type) elements.type.textContent = archive.type;
     if (elements.date) elements.date.textContent = archive.date;
     if (elements.description) elements.description.textContent = archive.description;
-    if (elements.details) elements.details.textContent = archive.details;
+    if (elements.details) elements.details.textContent = archive.content;
     
     // 추가 정보
     if (archive.genre) {
@@ -591,10 +593,13 @@ item.addEventListener('click', () => {
       content.appendChild(meta);
       item.appendChild(content);
       
-      // 블로그 목록에서
+      // 📍 수정된 클릭 이벤트: 더 간단한 URL 생성
       item.addEventListener('click', () => {
-      const dir = App.utils.getCurrentDir(); window.location.href = dir + 'blog.html?id=' + post.id;
-    });
+        const basePath = App.utils.getBasePath();
+        const newUrl = basePath + 'blog.html?id=' + post.id;
+        console.log('🚀 블로그 클릭, 이동할 URL:', newUrl);
+        window.location.href = newUrl;
+      });
       
       list.appendChild(item);
       
