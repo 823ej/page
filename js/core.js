@@ -326,24 +326,45 @@ App.components = {
       return;
     }
 
+    console.log('✅ 캐릭터 데이터:', character); // 디버그 로그
+
     // 섹션 전환
     document.getElementById('character-list-section').classList.remove('active');
     document.getElementById('character-detail-section').classList.add('active');
 
     // 상세 정보 채우기
-    document.getElementById('character-detail-name').textContent = character.name;
-    document.getElementById('character-detail-title').textContent = character.title;
-    document.getElementById('character-detail-description').textContent = character.description;
-    document.getElementById('character-detail-story').textContent = character.story;
-    
+    const nameEl = document.getElementById('character-detail-name');
+    const titleEl = document.getElementById('character-detail-title');
+    const descEl = document.getElementById('character-detail-description');
+    const storyEl = document.getElementById('character-detail-story');
     const detailImage = document.getElementById('character-detail-image');
-    detailImage.src = character.fullImage || character.image;
-    detailImage.alt = character.name;
 
-    // 능력치 표시
-    this.createStatDots('combat-stats', character.stats.combat);
-    this.createStatDots('magic-stats', character.stats.magic, 'cyan');
-    this.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
+    if (nameEl) nameEl.textContent = character.name;
+    if (titleEl) titleEl.textContent = character.title;
+    if (descEl) descEl.textContent = character.description;
+    if (storyEl) storyEl.textContent = character.story;
+    
+    if (detailImage) {
+      detailImage.src = character.fullImage || character.image;
+      detailImage.alt = character.name;
+    }
+
+    console.log('✅ 기본 정보 채우기 완료'); // 디버그 로그
+
+    // 능력치 표시 - this 대신 App.components 사용
+    App.components.createStatDots('combat-stats', character.stats.combat);
+    App.components.createStatDots('magic-stats', character.stats.magic, 'cyan');
+    App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
+
+    // 능력치 행들에 애니메이션 적용
+    const statRows = document.querySelectorAll('.stat-row');
+    statRows.forEach((row, index) => {
+      setTimeout(() => {
+        row.classList.add('visible');
+      }, 600 + (index * 200));
+    });
+
+    console.log('✅ 능력치 생성 완료'); // 디버그 로그
 
     // 애니메이션 적용
     const contentContainer = document.querySelector('.content-container');
@@ -368,7 +389,12 @@ App.components = {
   // 능력치 점수 표시
   createStatDots(containerId, value, color = 'blue') {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+      console.warn(`❌ 능력치 컨테이너를 찾을 수 없습니다: ${containerId}`);
+      return;
+    }
+    
+    console.log(`✅ 능력치 생성: ${containerId} = ${value}`); // 디버그 로그
     
     container.innerHTML = '';
     
@@ -382,7 +408,7 @@ App.components = {
       // 순차적 애니메이션
       setTimeout(() => {
         dot.classList.add('visible');
-      }, 400 + (i * 100));
+      }, 800 + (i * 100));
     }
   },
 
@@ -444,31 +470,45 @@ App.components = {
       return;
     }
 
+    console.log('✅ 아카이브 데이터:', archive); // 디버그 로그
+
     // 섹션 전환
     document.getElementById('archive-list-section').classList.remove('active');
     document.getElementById('archive-detail-section').classList.add('active');
 
     // 상세 정보 채우기
-    document.getElementById('archive-detail-title').textContent = archive.title;
-    document.getElementById('archive-detail-type').textContent = archive.type;
-    document.getElementById('archive-detail-date').textContent = archive.date;
-    document.getElementById('archive-detail-description').textContent = archive.description;
-    document.getElementById('archive-detail-details').textContent = archive.details;
+    const titleEl = document.getElementById('archive-detail-title');
+    const typeEl = document.getElementById('archive-detail-type');
+    const dateEl = document.getElementById('archive-detail-date');
+    const descEl = document.getElementById('archive-detail-description');
+    const detailsEl = document.getElementById('archive-detail-details');
+    const detailImage = document.getElementById('archive-detail-image');
+
+    if (titleEl) titleEl.textContent = archive.title;
+    if (typeEl) typeEl.textContent = archive.type;
+    if (dateEl) dateEl.textContent = archive.date;
+    if (descEl) descEl.textContent = archive.description;
+    if (detailsEl) detailsEl.textContent = archive.details;
     
     // 추가 정보가 있는 경우
-    if (archive.genre) {
-      document.getElementById('archive-detail-genre').textContent = `장르: ${archive.genre}`;
+    const genreEl = document.getElementById('archive-detail-genre');
+    const durationEl = document.getElementById('archive-detail-duration');
+    const toolsEl = document.getElementById('archive-detail-tools');
+
+    if (genreEl && archive.genre) {
+      genreEl.textContent = `장르: ${archive.genre}`;
     }
-    if (archive.duration) {
-      document.getElementById('archive-detail-duration').textContent = `제작 기간: ${archive.duration}`;
+    if (durationEl && archive.duration) {
+      durationEl.textContent = `제작 기간: ${archive.duration}`;
     }
-    if (archive.tools) {
-      document.getElementById('archive-detail-tools').textContent = `제작 도구: ${archive.tools}`;
+    if (toolsEl && archive.tools) {
+      toolsEl.textContent = `제작 도구: ${archive.tools}`;
     }
     
-    const detailImage = document.getElementById('archive-detail-image');
-    detailImage.src = archive.fullImage || archive.image;
-    detailImage.alt = archive.title;
+    if (detailImage) {
+      detailImage.src = archive.fullImage || archive.image;
+      detailImage.alt = archive.title;
+    }
 
     // 애니메이션 적용
     const contentContainer = document.querySelector('.content-container');
@@ -544,34 +584,47 @@ App.components = {
       return;
     }
 
+    console.log('✅ 블로그 데이터:', post); // 디버그 로그
+
     // 섹션 전환
     document.getElementById('blog-list-section').classList.remove('active');
     document.getElementById('blog-detail-section').classList.add('active');
 
     // 상세 정보 채우기
-    document.getElementById('blog-detail-title').textContent = post.title;
-    document.getElementById('blog-detail-category').textContent = post.category;
-    document.getElementById('blog-detail-date').textContent = post.date;
-    document.getElementById('blog-detail-description').textContent = post.description;
-    document.getElementById('blog-detail-content').textContent = post.content;
+    const titleEl = document.getElementById('blog-detail-title');
+    const categoryEl = document.getElementById('blog-detail-category');
+    const dateEl = document.getElementById('blog-detail-date');
+    const descEl = document.getElementById('blog-detail-description');
+    const contentEl = document.getElementById('blog-detail-content');
+    const detailImage = document.getElementById('blog-detail-image');
+
+    if (titleEl) titleEl.textContent = post.title;
+    if (categoryEl) categoryEl.textContent = post.category;
+    if (dateEl) dateEl.textContent = post.date;
+    if (descEl) descEl.textContent = post.description;
+    if (contentEl) contentEl.textContent = post.content;
     
     // 추가 정보가 있는 경우
-    if (post.readTime) {
-      document.getElementById('blog-detail-readtime').textContent = `읽는 시간: ${post.readTime}`;
+    const readTimeEl = document.getElementById('blog-detail-readtime');
+    const viewsEl = document.getElementById('blog-detail-views');
+    const tagsEl = document.getElementById('blog-detail-tags');
+
+    if (readTimeEl && post.readTime) {
+      readTimeEl.textContent = `읽는 시간: ${post.readTime}`;
     }
-    if (post.views) {
-      document.getElementById('blog-detail-views').textContent = `조회수: ${post.views}`;
+    if (viewsEl && post.views) {
+      viewsEl.textContent = `조회수: ${post.views}`;
     }
     
     // 태그 표시
-    const tagsContainer = document.getElementById('blog-detail-tags');
-    if (post.tags && post.tags.length > 0) {
-      tagsContainer.innerHTML = '<strong>태그:</strong> ' + post.tags.join(', ');
+    if (tagsEl && post.tags && post.tags.length > 0) {
+      tagsEl.innerHTML = '<strong>태그:</strong> ' + post.tags.join(', ');
     }
     
-    const detailImage = document.getElementById('blog-detail-image');
-    detailImage.src = post.fullImage || post.image;
-    detailImage.alt = post.title;
+    if (detailImage) {
+      detailImage.src = post.fullImage || post.image;
+      detailImage.alt = post.title;
+    }
 
     // 애니메이션 적용
     const contentContainer = document.querySelector('.content-container');
