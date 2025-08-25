@@ -106,6 +106,100 @@ App.components = {
     }
   },
 
+  // Introduction 페이지 초기화 (추가!)
+  initIntroPage() {
+    console.log('📖 Introduction 페이지 초기화...');
+    
+    // 기본 페이지 요소들 먼저 초기화
+    this.initBasicPage();
+    
+    // Introduction 전용 요소들 순차적으로 애니메이션
+    const introContent = document.querySelector('.intro-content');
+    const introImage = document.querySelector('.intro-image');
+    const featuresSection = document.querySelector('.features-section');
+    const featureCards = document.querySelectorAll('.feature-card');
+    
+    if (introContent) {
+      setTimeout(() => {
+        introContent.classList.add('visible');
+        console.log('✅ intro-content 애니메이션 시작!');
+      }, 400);
+    }
+    
+    if (introImage) {
+      setTimeout(() => {
+        introImage.classList.add('visible');
+        console.log('✅ intro-image 애니메이션 시작!');
+      }, 600);
+    }
+    
+    if (featuresSection) {
+      setTimeout(() => {
+        featuresSection.classList.add('visible');
+        console.log('✅ features-section 애니메이션 시작!');
+      }, 800);
+    }
+    
+    // Feature cards를 하나씩 순차적으로 애니메이션
+    featureCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('visible');
+        console.log(`✅ feature-card ${index + 1} 애니메이션 시작!`);
+      }, 1000 + (index * 200));
+    });
+  },
+
+  // World 페이지 초기화 (추가!)
+  initWorldPage() {
+    console.log('🌍 World 페이지 초기화...');
+    
+    // 기본 페이지 요소들 먼저 초기화
+    this.initBasicPage();
+    
+    // World 전용 요소들 순차적으로 애니메이션
+    const worldBanner = document.querySelector('.world-banner');
+    const worldContent = document.querySelector('.world-content');
+    const worldImage = document.querySelector('.world-image');
+    const worldFeatures = document.querySelector('.world-features');
+    const featureCards = document.querySelectorAll('.feature-card');
+    
+    if (worldBanner) {
+      setTimeout(() => {
+        worldBanner.classList.add('visible');
+        console.log('✅ world-banner 애니메이션 시작!');
+      }, 400);
+    }
+    
+    if (worldContent) {
+      setTimeout(() => {
+        worldContent.classList.add('visible');
+        console.log('✅ world-content 애니메이션 시작!');
+      }, 600);
+    }
+    
+    if (worldImage) {
+      setTimeout(() => {
+        worldImage.classList.add('visible');
+        console.log('✅ world-image 애니메이션 시작!');
+      }, 800);
+    }
+    
+    if (worldFeatures) {
+      setTimeout(() => {
+        worldFeatures.classList.add('visible');
+        console.log('✅ world-features 애니메이션 시작!');
+      }, 1000);
+    }
+    
+    // Feature cards를 하나씩 순차적으로 애니메이션
+    featureCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('visible');
+        console.log(`✅ world feature-card ${index + 1} 애니메이션 시작!`);
+      }, 1200 + (index * 200));
+    });
+  },
+
   // 배경 버블 생성
   createBackgroundBubbles() {
     const container = document.createElement('div');
@@ -348,11 +442,11 @@ App.init = async function() {
   } else if (currentPage === 'blog.html') {
     App.components.createBlogList();
   } else if (currentPage === 'introduction.html') {
-    // Introduction 페이지 - 기본 애니메이션만
-    App.components.initBasicPage();
+    // Introduction 페이지 - 전용 초기화 함수 사용
+    App.components.initIntroPage();
   } else if (currentPage === 'world.html') {
-    // World 페이지 - 기본 애니메이션만
-    App.components.initBasicPage();
+    // World 페이지 - 전용 초기화 함수 사용
+    App.components.initWorldPage();
   } else if (currentPage === 'index.html' || currentPage === '') {
     // 메인 페이지 초기화
     App.components.initMainPage();
