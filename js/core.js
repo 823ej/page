@@ -1,4 +1,4 @@
-// 🌟 GitHub Pages용 수정된 core.js
+// 🌟 GitHub Pages용 수정된 core.js - 디버그 버전
 // data.json 대신 data.js의 전역 변수를 사용해요!
 
 // 전역 앱 객체
@@ -41,25 +41,22 @@ App.utils = {
     for (const [key, value] of params.entries()) {
       result[key] = decodeURIComponent(value);
     }
+    console.log('🔗 URL 파라미터:', result);
     return result;
   },
 
   // 현재 페이지 이름 가져오기
   getCurrentPage() {
-    return window.location.pathname.split('/').pop() || 'index.html';
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    console.log('📄 현재 페이지:', page);
+    return page;
   },
 
-  // 페이지 전환 with 애니메이션
+  // 페이지 전환 - 단순화된 버전
   navigateToPage(url) {
-    const overlay = document.getElementById('page-overlay');
-    if (overlay) {
-      overlay.classList.add('active');
-      setTimeout(() => {
-        window.location.href = url;
-      }, 500);
-    } else {
-      window.location.href = url;
-    }
+    console.log('🚀 페이지 이동:', url);
+    // 애니메이션 제거하고 직접 이동
+    window.location.href = url;
   },
 
   // 요소 생성 헬퍼
@@ -92,7 +89,7 @@ App.components = {
     }
   },
 
-  // 메인 페이지 초기화 (누락된 함수 추가!)
+  // 메인 페이지 초기화
   initMainPage() {
     console.log('🏠 메인 페이지 초기화...');
     
@@ -106,7 +103,7 @@ App.components = {
     }
   },
 
-  // Introduction 페이지 초기화 (추가!)
+  // Introduction 페이지 초기화
   initIntroPage() {
     console.log('📖 Introduction 페이지 초기화...');
     
@@ -149,7 +146,7 @@ App.components = {
     });
   },
 
-  // World 페이지 초기화 (추가!)
+  // World 페이지 초기화
   initWorldPage() {
     console.log('🌍 World 페이지 초기화...');
     
@@ -298,9 +295,12 @@ App.components = {
       
       item.appendChild(img);
       
-      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
-      item.addEventListener('click', () => {
-        App.utils.navigateToPage(`character.html?id=${character.id}`);
+      // 클릭 이벤트 - 간단한 버전
+      item.addEventListener('click', (e) => {
+        console.log('🖱️ 캐릭터 클릭됨:', character.name, 'ID:', character.id);
+        const targetUrl = `character.html?id=${character.id}`;
+        console.log('🎯 이동할 URL:', targetUrl);
+        window.location.href = targetUrl;
       });
       
       grid.appendChild(item);
@@ -318,70 +318,98 @@ App.components = {
 
   // 캐릭터 상세 페이지 생성
   createCharacterDetail(characterId) {
-    console.log('👤 캐릭터 상세 페이지 생성:', characterId);
+    console.log('👤 캐릭터 상세 페이지 생성 시작, ID:', characterId);
     
-    const character = App.data.characters.find(c => c.id === parseInt(characterId));
-    if (!character) {
-      console.error('❌ 캐릭터를 찾을 수 없습니다:', characterId);
+    if (!App.data || !App.data.characters) {
+      console.error('❌ 데이터가 없습니다:', App.data);
       return;
     }
 
-    console.log('✅ 캐릭터 데이터:', character); // 디버그 로그
-
-    // 섹션 전환
-    document.getElementById('character-list-section').classList.remove('active');
-    document.getElementById('character-detail-section').classList.add('active');
-
-    // 상세 정보 채우기
-    const nameEl = document.getElementById('character-detail-name');
-    const titleEl = document.getElementById('character-detail-title');
-    const descEl = document.getElementById('character-detail-description');
-    const storyEl = document.getElementById('character-detail-story');
-    const detailImage = document.getElementById('character-detail-image');
-
-    if (nameEl) nameEl.textContent = character.name;
-    if (titleEl) titleEl.textContent = character.title;
-    if (descEl) descEl.textContent = character.description;
-    if (storyEl) storyEl.textContent = character.story;
-    
-    if (detailImage) {
-      detailImage.src = character.fullImage || character.image;
-      detailImage.alt = character.name;
+    const character = App.data.characters.find(c => c.id === parseInt(characterId));
+    if (!character) {
+      console.error('❌ 캐릭터를 찾을 수 없습니다. ID:', characterId);
+      console.log('📋 사용 가능한 캐릭터들:', App.data.characters.map(c => ({id: c.id, name: c.name})));
+      return;
     }
 
-    console.log('✅ 기본 정보 채우기 완료'); // 디버그 로그
+    console.log('✅ 캐릭터 데이터 찾음:', character);
 
-    // 능력치 표시 - this 대신 App.components 사용
-    App.components.createStatDots('combat-stats', character.stats.combat);
-    App.components.createStatDots('magic-stats', character.stats.magic, 'cyan');
-    App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
+    // 섹션 확인
+    const listSection = document.getElementById('character-list-section');
+    const detailSection = document.getElementById('character-detail-section');
+    
+    console.log('📋 리스트 섹션:', listSection);
+    console.log('📄 상세 섹션:', detailSection);
 
-    // 능력치 행들에 애니메이션 적용
-    const statRows = document.querySelectorAll('.stat-row');
-    statRows.forEach((row, index) => {
-      setTimeout(() => {
-        row.classList.add('visible');
-      }, 600 + (index * 200));
-    });
+    if (!listSection || !detailSection) {
+      console.error('❌ 필요한 섹션을 찾을 수 없습니다');
+      return;
+    }
 
-    console.log('✅ 능력치 생성 완료'); // 디버그 로그
+    // 섹션 전환
+    listSection.classList.remove('active');
+    detailSection.classList.add('active');
+    console.log('✅ 섹션 전환 완료');
+
+    // 상세 정보 채우기
+    const elements = {
+      name: document.getElementById('character-detail-name'),
+      title: document.getElementById('character-detail-title'),
+      description: document.getElementById('character-detail-description'),
+      story: document.getElementById('character-detail-story'),
+      image: document.getElementById('character-detail-image')
+    };
+
+    console.log('🔍 상세 페이지 요소들:', elements);
+
+    if (elements.name) {
+      elements.name.textContent = character.name;
+      console.log('✅ 이름 설정:', character.name);
+    }
+    if (elements.title) {
+      elements.title.textContent = character.title;
+      console.log('✅ 타이틀 설정:', character.title);
+    }
+    if (elements.description) {
+      elements.description.textContent = character.description;
+      console.log('✅ 설명 설정');
+    }
+    if (elements.story) {
+      elements.story.textContent = character.story;
+      console.log('✅ 스토리 설정');
+    }
+    if (elements.image) {
+      elements.image.src = character.fullImage || character.image;
+      elements.image.alt = character.name;
+      console.log('✅ 이미지 설정:', character.fullImage || character.image);
+    }
+
+    // 능력치 표시
+    if (character.stats) {
+      console.log('⚡ 능력치 설정 시작:', character.stats);
+      App.components.createStatDots('combat-stats', character.stats.combat);
+      App.components.createStatDots('magic-stats', character.stats.magic, 'cyan');
+      App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
+    }
 
     // 애니메이션 적용
     const contentContainer = document.querySelector('.content-container');
-    const characterDetailContent = document.querySelector('.character-detail-content');
-    const characterImageContainer = document.querySelector('.character-image-container');
-    const characterInfo = document.querySelector('.character-info');
-    
     if (contentContainer) contentContainer.classList.add('visible');
-    if (characterDetailContent) {
-      setTimeout(() => characterDetailContent.classList.add('visible'), 100);
-    }
-    if (characterImageContainer) {
-      setTimeout(() => characterImageContainer.classList.add('visible'), 200);
-    }
-    if (characterInfo) {
-      setTimeout(() => characterInfo.classList.add('visible'), 300);
-    }
+
+    setTimeout(() => {
+      const characterDetailContent = document.querySelector('.character-detail-content');
+      if (characterDetailContent) characterDetailContent.classList.add('visible');
+    }, 100);
+
+    setTimeout(() => {
+      const characterImageContainer = document.querySelector('.character-image-container');
+      if (characterImageContainer) characterImageContainer.classList.add('visible');
+    }, 200);
+
+    setTimeout(() => {
+      const characterInfo = document.querySelector('.character-info');
+      if (characterInfo) characterInfo.classList.add('visible');
+    }, 300);
 
     console.log('✅ 캐릭터 상세 페이지 생성 완료:', character.name);
   },
@@ -394,7 +422,7 @@ App.components = {
       return;
     }
     
-    console.log(`✅ 능력치 생성: ${containerId} = ${value}`); // 디버그 로그
+    console.log(`⚡ 능력치 생성: ${containerId} = ${value}`);
     
     container.innerHTML = '';
     
@@ -446,9 +474,10 @@ App.components = {
       item.appendChild(imageDiv);
       item.appendChild(info);
       
-      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
+      // 클릭 이벤트 - 간단한 버전
       item.addEventListener('click', () => {
-        App.utils.navigateToPage(`archive.html?id=${archive.id}`);
+        console.log('🖱️ 아카이브 클릭됨:', archive.title, 'ID:', archive.id);
+        window.location.href = `archive.html?id=${archive.id}`;
       });
       
       grid.appendChild(item);
@@ -470,62 +499,55 @@ App.components = {
       return;
     }
 
-    console.log('✅ 아카이브 데이터:', archive); // 디버그 로그
+    console.log('✅ 아카이브 데이터:', archive);
 
     // 섹션 전환
     document.getElementById('archive-list-section').classList.remove('active');
     document.getElementById('archive-detail-section').classList.add('active');
 
     // 상세 정보 채우기
-    const titleEl = document.getElementById('archive-detail-title');
-    const typeEl = document.getElementById('archive-detail-type');
-    const dateEl = document.getElementById('archive-detail-date');
-    const descEl = document.getElementById('archive-detail-description');
-    const detailsEl = document.getElementById('archive-detail-details');
-    const detailImage = document.getElementById('archive-detail-image');
+    const elements = {
+      title: document.getElementById('archive-detail-title'),
+      type: document.getElementById('archive-detail-type'),
+      date: document.getElementById('archive-detail-date'),
+      description: document.getElementById('archive-detail-description'),
+      details: document.getElementById('archive-detail-details'),
+      image: document.getElementById('archive-detail-image')
+    };
 
-    if (titleEl) titleEl.textContent = archive.title;
-    if (typeEl) typeEl.textContent = archive.type;
-    if (dateEl) dateEl.textContent = archive.date;
-    if (descEl) descEl.textContent = archive.description;
-    if (detailsEl) detailsEl.textContent = archive.details;
+    if (elements.title) elements.title.textContent = archive.title;
+    if (elements.type) elements.type.textContent = archive.type;
+    if (elements.date) elements.date.textContent = archive.date;
+    if (elements.description) elements.description.textContent = archive.description;
+    if (elements.details) elements.details.textContent = archive.details;
     
-    // 추가 정보가 있는 경우
-    const genreEl = document.getElementById('archive-detail-genre');
-    const durationEl = document.getElementById('archive-detail-duration');
-    const toolsEl = document.getElementById('archive-detail-tools');
-
-    if (genreEl && archive.genre) {
-      genreEl.textContent = `장르: ${archive.genre}`;
+    // 추가 정보
+    if (archive.genre) {
+      const genreEl = document.getElementById('archive-detail-genre');
+      if (genreEl) genreEl.textContent = `장르: ${archive.genre}`;
     }
-    if (durationEl && archive.duration) {
-      durationEl.textContent = `제작 기간: ${archive.duration}`;
+    if (archive.duration) {
+      const durationEl = document.getElementById('archive-detail-duration');
+      if (durationEl) durationEl.textContent = `제작 기간: ${archive.duration}`;
     }
-    if (toolsEl && archive.tools) {
-      toolsEl.textContent = `제작 도구: ${archive.tools}`;
+    if (archive.tools) {
+      const toolsEl = document.getElementById('archive-detail-tools');
+      if (toolsEl) toolsEl.textContent = `제작 도구: ${archive.tools}`;
     }
     
-    if (detailImage) {
-      detailImage.src = archive.fullImage || archive.image;
-      detailImage.alt = archive.title;
+    if (elements.image) {
+      elements.image.src = archive.fullImage || archive.image;
+      elements.image.alt = archive.title;
     }
 
-    // 애니메이션 적용
+    // 애니메이션
     const contentContainer = document.querySelector('.content-container');
-    const archiveDetailContent = document.querySelector('.archive-detail-content');
-    const archiveImageContainer = document.querySelector('.archive-image-container');
-    const archiveContent = document.querySelector('.archive-content');
-    
     if (contentContainer) contentContainer.classList.add('visible');
-    if (archiveDetailContent) {
-      setTimeout(() => archiveDetailContent.classList.add('visible'), 100);
-    }
-    if (archiveImageContainer) {
-      setTimeout(() => archiveImageContainer.classList.add('visible'), 200);
-    }
-    if (archiveContent) {
-      setTimeout(() => archiveContent.classList.add('visible'), 300);
-    }
+
+    setTimeout(() => {
+      const detailContent = document.querySelector('.archive-detail-content');
+      if (detailContent) detailContent.classList.add('visible');
+    }, 100);
 
     console.log('✅ 아카이브 상세 페이지 생성 완료:', archive.title);
   },
@@ -561,9 +583,10 @@ App.components = {
       content.appendChild(meta);
       item.appendChild(content);
       
-      // 클릭 이벤트 - URL 파라미터로 상세 페이지 이동
+      // 클릭 이벤트 - 간단한 버전
       item.addEventListener('click', () => {
-        App.utils.navigateToPage(`blog.html?id=${post.id}`);
+        console.log('🖱️ 블로그 클릭됨:', post.title, 'ID:', post.id);
+        window.location.href = `blog.html?id=${post.id}`;
       });
       
       list.appendChild(item);
@@ -584,64 +607,55 @@ App.components = {
       return;
     }
 
-    console.log('✅ 블로그 데이터:', post); // 디버그 로그
+    console.log('✅ 블로그 데이터:', post);
 
     // 섹션 전환
     document.getElementById('blog-list-section').classList.remove('active');
     document.getElementById('blog-detail-section').classList.add('active');
 
     // 상세 정보 채우기
-    const titleEl = document.getElementById('blog-detail-title');
-    const categoryEl = document.getElementById('blog-detail-category');
-    const dateEl = document.getElementById('blog-detail-date');
-    const descEl = document.getElementById('blog-detail-description');
-    const contentEl = document.getElementById('blog-detail-content');
-    const detailImage = document.getElementById('blog-detail-image');
+    const elements = {
+      title: document.getElementById('blog-detail-title'),
+      category: document.getElementById('blog-detail-category'),
+      date: document.getElementById('blog-detail-date'),
+      description: document.getElementById('blog-detail-description'),
+      content: document.getElementById('blog-detail-content'),
+      image: document.getElementById('blog-detail-image')
+    };
 
-    if (titleEl) titleEl.textContent = post.title;
-    if (categoryEl) categoryEl.textContent = post.category;
-    if (dateEl) dateEl.textContent = post.date;
-    if (descEl) descEl.textContent = post.description;
-    if (contentEl) contentEl.textContent = post.content;
+    if (elements.title) elements.title.textContent = post.title;
+    if (elements.category) elements.category.textContent = post.category;
+    if (elements.date) elements.date.textContent = post.date;
+    if (elements.description) elements.description.textContent = post.description;
+    if (elements.content) elements.content.textContent = post.content;
     
-    // 추가 정보가 있는 경우
-    const readTimeEl = document.getElementById('blog-detail-readtime');
-    const viewsEl = document.getElementById('blog-detail-views');
-    const tagsEl = document.getElementById('blog-detail-tags');
-
-    if (readTimeEl && post.readTime) {
-      readTimeEl.textContent = `읽는 시간: ${post.readTime}`;
+    // 추가 정보
+    if (post.readTime) {
+      const readTimeEl = document.getElementById('blog-detail-readtime');
+      if (readTimeEl) readTimeEl.textContent = `읽는 시간: ${post.readTime}`;
     }
-    if (viewsEl && post.views) {
-      viewsEl.textContent = `조회수: ${post.views}`;
+    if (post.views) {
+      const viewsEl = document.getElementById('blog-detail-views');
+      if (viewsEl) viewsEl.textContent = `조회수: ${post.views}`;
     }
-    
-    // 태그 표시
-    if (tagsEl && post.tags && post.tags.length > 0) {
-      tagsEl.innerHTML = '<strong>태그:</strong> ' + post.tags.join(', ');
+    if (post.tags && post.tags.length > 0) {
+      const tagsEl = document.getElementById('blog-detail-tags');
+      if (tagsEl) tagsEl.innerHTML = '<strong>태그:</strong> ' + post.tags.join(', ');
     }
     
-    if (detailImage) {
-      detailImage.src = post.fullImage || post.image;
-      detailImage.alt = post.title;
+    if (elements.image) {
+      elements.image.src = post.fullImage || post.image;
+      elements.image.alt = post.title;
     }
 
-    // 애니메이션 적용
+    // 애니메이션
     const contentContainer = document.querySelector('.content-container');
-    const blogDetailContent = document.querySelector('.blog-detail-content');
-    const blogImageContainer = document.querySelector('.blog-image-container');
-    const blogContent = document.querySelector('.blog-content');
-    
     if (contentContainer) contentContainer.classList.add('visible');
-    if (blogDetailContent) {
-      setTimeout(() => blogDetailContent.classList.add('visible'), 100);
-    }
-    if (blogImageContainer) {
-      setTimeout(() => blogImageContainer.classList.add('visible'), 200);
-    }
-    if (blogContent) {
-      setTimeout(() => blogContent.classList.add('visible'), 300);
-    }
+
+    setTimeout(() => {
+      const detailContent = document.querySelector('.blog-detail-content');
+      if (detailContent) detailContent.classList.add('visible');
+    }, 100);
 
     console.log('✅ 블로그 상세 페이지 생성 완료:', post.title);
   }
@@ -659,9 +673,12 @@ App.init = async function() {
     return;
   }
 
-  // 현재 페이지 확인
+  // 현재 페이지와 URL 파라미터 확인
   const currentPage = App.utils.getCurrentPage();
+  const urlParams = App.utils.getUrlParams();
+  
   console.log('📄 현재 페이지:', currentPage);
+  console.log('🔗 URL 파라미터:', urlParams);
 
   // 🫧 물거품 효과 추가
   App.components.createBackgroundBubbles();
@@ -671,40 +688,34 @@ App.init = async function() {
   
   // 페이지별 콘텐츠 생성
   if (currentPage === 'character.html') {
-    const urlParams = App.utils.getUrlParams();
     if (urlParams.id) {
-      // 캐릭터 상세 페이지
+      console.log('👤 캐릭터 상세 페이지 모드, ID:', urlParams.id);
       App.components.createCharacterDetail(urlParams.id);
     } else {
-      // 캐릭터 목록 페이지
+      console.log('👥 캐릭터 목록 페이지 모드');
       App.components.createCharacterGrid();
     }
   } else if (currentPage === 'archive.html') {
-    const urlParams = App.utils.getUrlParams();
     if (urlParams.id) {
-      // 아카이브 상세 페이지
+      console.log('📁 아카이브 상세 페이지 모드, ID:', urlParams.id);
       App.components.createArchiveDetail(urlParams.id);
     } else {
-      // 아카이브 목록 페이지
+      console.log('📚 아카이브 목록 페이지 모드');
       App.components.createArchiveGrid();
     }
   } else if (currentPage === 'blog.html') {
-    const urlParams = App.utils.getUrlParams();
     if (urlParams.id) {
-      // 블로그 상세 페이지
+      console.log('📝 블로그 상세 페이지 모드, ID:', urlParams.id);
       App.components.createBlogDetail(urlParams.id);
     } else {
-      // 블로그 목록 페이지
+      console.log('📰 블로그 목록 페이지 모드');
       App.components.createBlogList();
     }
   } else if (currentPage === 'introduction.html') {
-    // Introduction 페이지 - 전용 초기화 함수 사용
     App.components.initIntroPage();
   } else if (currentPage === 'world.html') {
-    // World 페이지 - 전용 초기화 함수 사용
     App.components.initWorldPage();
   } else if (currentPage === 'index.html' || currentPage === '') {
-    // 메인 페이지 초기화
     App.components.initMainPage();
   }
   
