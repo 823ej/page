@@ -51,14 +51,6 @@ getCurrentPage() {
   return page;
 },
 
-// 현재 디렉터리 경로를 반환 (항상 저장소 루트 기준으로 끝에 슬래시 포함)
-getCurrentDir() {
-  // pathname 예: "/page", "/page/", "/page/character.html"
-  const segments = window.location.pathname.split('/');
-  const base = segments[1];        // "page"
-  return '/' + base + '/';         // "/page/"
-},
-
   // 현재 페이지 이름 가져오기
   getCurrentDir() {
    // pathname 예: "/page", "/page/", "/page/character.html"
