@@ -65,7 +65,12 @@ App.utils = {
     if (className) element.className = className;
     if (innerHTML) element.innerHTML = innerHTML;
     return element;
-  }
+  },
+  // App.utils에 현재 디렉터리 반환 함수 추가
+getCurrentDir() {
+  const path = window.location.pathname;
+  return path.substring(0, path.lastIndexOf('/') + 1);
+}
 };
 
 // 컴포넌트 시스템
@@ -295,13 +300,12 @@ App.components = {
       
       item.appendChild(img);
       
-      // 클릭 이벤트 - 간단한 버전
-      item.addEventListener('click', (e) => {
-        console.log('🖱️ 캐릭터 클릭됨:', character.name, 'ID:', character.id);
-        const targetUrl = `character.html?id=${character.id}`;
-        console.log('🎯 이동할 URL:', targetUrl);
-        window.location.href = targetUrl;
-      });
+
+// 캐릭터 그리드에서
+      item.addEventListener('click', () => {
+      const dir = App.utils.getCurrentDir();
+      window.location.href = `${dir}character.html?id=${character.id}`;
+    });
       
       grid.appendChild(item);
       
@@ -474,11 +478,12 @@ App.components = {
       item.appendChild(imageDiv);
       item.appendChild(info);
       
-      // 클릭 이벤트 - 간단한 버전
-      item.addEventListener('click', () => {
-        console.log('🖱️ 아카이브 클릭됨:', archive.title, 'ID:', archive.id);
-        window.location.href = `archive.html?id=${archive.id}`;
-      });
+      // 아카이브 목록에서
+item.addEventListener('click', () => {
+  const dir = App.utils.getCurrentDir();
+  window.location.href = `${dir}archive.html?id=${archive.id}`;
+});
+
       
       grid.appendChild(item);
       
@@ -583,11 +588,11 @@ App.components = {
       content.appendChild(meta);
       item.appendChild(content);
       
-      // 클릭 이벤트 - 간단한 버전
+      // 블로그 목록에서
       item.addEventListener('click', () => {
-        console.log('🖱️ 블로그 클릭됨:', post.title, 'ID:', post.id);
-        window.location.href = `blog.html?id=${post.id}`;
-      });
+      const dir = App.utils.getCurrentDir();
+      window.location.href = `${dir}blog.html?id=${post.id}`;
+    });
       
       list.appendChild(item);
       
