@@ -45,6 +45,20 @@ App.utils = {
     return result;
   },
 
+  // 현재 페이지 파일 이름을 반환
+getCurrentPage() {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  return page;
+},
+
+// 현재 디렉터리 경로를 반환 (항상 저장소 루트 기준으로 끝에 슬래시 포함)
+getCurrentDir() {
+  // pathname 예: "/page", "/page/", "/page/character.html"
+  const segments = window.location.pathname.split('/');
+  const base = segments[1];        // "page"
+  return '/' + base + '/';         // "/page/"
+},
+
   // 현재 페이지 이름 가져오기
   getCurrentDir() {
    // pathname 예: "/page", "/page/", "/page/character.html"
@@ -69,11 +83,7 @@ App.utils = {
     if (innerHTML) element.innerHTML = innerHTML;
     return element;
   },
-  // App.utils에 현재 디렉터리 반환 함수 추가
-getCurrentDir() {
-  const path = window.location.pathname;
-  return path.substring(0, path.lastIndexOf('/') + 1);
-}
+
 };
 
 // 컴포넌트 시스템
