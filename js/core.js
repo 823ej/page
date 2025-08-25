@@ -1,5 +1,5 @@
-// 🌟 GitHub Pages용 수정된 core.js - 애니메이션 단순화 버전
-// 전환 애니메이션 제거, 물거품과 메인 이미지 float만 유지
+// 🌟 GitHub Pages용 수정된 core.js - 게시글 페이지 문제 해결 버전
+// 강화된 디버깅과 간단한 URL 처리
 
 // 전역 앱 객체
 window.App = {
@@ -48,21 +48,28 @@ App.utils = {
   // 현재 페이지 파일 이름을 반환
   getCurrentPage() {
     const page = window.location.pathname.split('/').pop() || 'index.html';
+    console.log('📄 현재 페이지 파일명:', page);
     return page;
   },
 
-  // 📍 단순하게 현재 위치 기준으로 상대 경로 생성
+  // 📍 더욱 간단한 베이스 경로 - 상대 경로만 사용
   getBasePath() {
-    // 현재 경로에서 파일명만 제거하고 디렉토리 부분만 반환
-    const path = window.location.pathname;
-    const dir = path.substring(0, path.lastIndexOf('/') + 1);
-    return dir;
+    // 현재 페이지와 같은 폴더에 있는 파일로 이동
+    return './';
   },
   
-  // 페이지 전환 - 단순화된 버전
+  // 페이지 전환 - 더 강력한 디버깅
   navigateToPage(url) {
-    console.log('🚀 페이지 이동:', url);
-    window.location.href = url;
+    console.log('🚀 페이지 이동 시도:', url);
+    console.log('📍 현재 위치:', window.location.href);
+    
+    try {
+      window.location.href = url;
+      console.log('✅ 페이지 이동 명령 완료');
+    } catch (error) {
+      console.error('❌ 페이지 이동 실패:', error);
+      alert('페이지 이동에 실패했습니다: ' + error.message);
+    }
   },
 
   // 요소 생성 헬퍼
@@ -263,15 +270,22 @@ App.components = {
     nav.style.transform = 'translateY(0)';
   },
 
-  // 캐릭터 그리드 생성 - 애니메이션 제거
+  // 캐릭터 그리드 생성 - 강화된 디버깅
   createCharacterGrid() {
     console.log('🔍 캐릭터 그리드 함수 실행됨!');
     
     const grid = document.getElementById('character-grid');
-    if (!grid || !App.data) {
-      console.log('❌ Grid나 데이터가 없음');
+    if (!grid) {
+      console.error('❌ character-grid 요소를 찾을 수 없습니다!');
       return;
     }
+    
+    if (!App.data || !App.data.characters) {
+      console.error('❌ 캐릭터 데이터가 없습니다:', App.data);
+      return;
+    }
+
+    console.log('📊 캐릭터 데이터:', App.data.characters);
 
     // 페이지 요소들을 바로 보이게 만들기
     const contentContainer = document.querySelector('.content-container');
@@ -298,6 +312,8 @@ App.components = {
     grid.innerHTML = '';
     
     App.data.characters.forEach((character, index) => {
+      console.log(`🎭 캐릭터 ${index + 1} 생성 중:`, character);
+      
       const item = App.utils.createElement('div', 'character-item');
       
       const img = App.utils.createElement('img');
@@ -306,11 +322,25 @@ App.components = {
       
       item.appendChild(img);
       
+      // 📍 강화된 클릭 이벤트 처리
       item.addEventListener('click', () => {
+        console.log('🖱️ 캐릭터 클릭됨:', character);
+        console.log('📍 현재 URL:', window.location.href);
+        
         const basePath = App.utils.getBasePath();
         const newUrl = basePath + 'character.html?id=' + character.id;
-        console.log('🚀 캐릭터 클릭, 이동할 URL:', newUrl);
+        
+        console.log('🔗 생성된 URL:', newUrl);
+        console.log('📂 베이스 경로:', basePath);
+        
+        // 즉시 이동 시도
+        console.log('🚀 페이지 이동 시작...');
         window.location.href = newUrl;
+      });
+      
+      // 추가 디버깅용 더블클릭 이벤트
+      item.addEventListener('dblclick', () => {
+        alert(`캐릭터: ${character.name}\nID: ${character.id}\n이동할 URL: ./character.html?id=${character.id}`);
       });
       
       grid.appendChild(item);
@@ -320,40 +350,56 @@ App.components = {
       item.style.opacity = '1';
       item.style.transform = 'translateY(0)';
       
-      console.log(`캐릭터 ${index + 1} 생성:`, character.name);
+      console.log(`✅ 캐릭터 ${index + 1} 생성 완료:`, character.name);
     });
     
     console.log('✅ 모든 캐릭터 생성 완료!');
   },
 
-  // 캐릭터 상세 페이지 생성 - 애니메이션 제거
+  // 캐릭터 상세 페이지 생성 - 강화된 디버깅
   createCharacterDetail(characterId) {
-    console.log('👤 캐릭터 상세 페이지 생성 시작, ID:', characterId);
+    console.log('👤 캐릭터 상세 페이지 생성 시작!');
+    console.log('🔢 전달받은 ID:', characterId, '타입:', typeof characterId);
     
     if (!App.data || !App.data.characters) {
       console.error('❌ 데이터가 없습니다:', App.data);
+      alert('데이터를 불러올 수 없습니다.');
       return;
     }
+
+    console.log('📊 사용 가능한 캐릭터들:', App.data.characters);
 
     const character = App.data.characters.find(c => c.id === parseInt(characterId));
     if (!character) {
       console.error('❌ 캐릭터를 찾을 수 없습니다. ID:', characterId);
+      console.log('🔍 검색 시도:', App.data.characters.map(c => `ID: ${c.id} (${typeof c.id})`));
+      alert(`캐릭터 ID ${characterId}를 찾을 수 없습니다.`);
       return;
     }
 
     console.log('✅ 캐릭터 데이터 찾음:', character);
 
-    // 섹션 전환
+    // 섹션 확인 및 전환
     const listSection = document.getElementById('character-list-section');
     const detailSection = document.getElementById('character-detail-section');
     
+    console.log('📋 리스트 섹션 존재:', !!listSection);
+    console.log('📄 상세 섹션 존재:', !!detailSection);
+
     if (!listSection || !detailSection) {
       console.error('❌ 필요한 섹션을 찾을 수 없습니다');
+      alert('페이지 구조에 문제가 있습니다.');
       return;
     }
 
+    // 섹션 전환
+    console.log('🔄 섹션 전환 시작...');
     listSection.classList.remove('active');
+    listSection.style.display = 'none';
+    
     detailSection.classList.add('active');
+    detailSection.style.display = 'block';
+    console.log('✅ 섹션 전환 완료');
 
     // 상세 정보 채우기
     const elements = {
@@ -364,17 +410,36 @@ App.components = {
       image: document.getElementById('character-detail-image')
     };
 
-    if (elements.name) elements.name.textContent = character.name;
-    if (elements.title) elements.title.textContent = character.title;
-    if (elements.description) elements.description.textContent = character.description;
-    if (elements.story) elements.story.textContent = character.story;
+    console.log('🔍 상세 페이지 요소들 존재 여부:');
+    Object.keys(elements).forEach(key => {
+      console.log(`  ${key}:`, !!elements[key]);
+    });
+
+    if (elements.name) {
+      elements.name.textContent = character.name;
+      console.log('✅ 이름 설정:', character.name);
+    }
+    if (elements.title) {
+      elements.title.textContent = character.title;
+      console.log('✅ 타이틀 설정:', character.title);
+    }
+    if (elements.description) {
+      elements.description.textContent = character.description;
+      console.log('✅ 설명 설정');
+    }
+    if (elements.story) {
+      elements.story.textContent = character.story;
+      console.log('✅ 스토리 설정');
+    }
     if (elements.image) {
       elements.image.src = character.fullImage || character.image;
       elements.image.alt = character.name;
+      console.log('✅ 이미지 설정:', character.fullImage || character.image);
     }
 
     // 능력치 표시
     if (character.stats) {
+      console.log('⚡ 능력치 설정 시작:', character.stats);
       App.components.createStatDots('combat-stats', character.stats.combat);
       App.components.createStatDots('magic-stats', character.stats.magic, 'cyan');
       App.components.createStatDots('wisdom-stats', character.stats.wisdom, 'purple');
@@ -407,13 +472,19 @@ App.components = {
       characterInfo.style.transform = 'translateX(0)';
     }
 
-    console.log('✅ 캐릭터 상세 페이지 생성 완료:', character.name);
+    console.log('🎉 캐릭터 상세 페이지 생성 완료:', character.name);
+    alert(`${character.name} 페이지가 로드되었습니다!`); // 성공 확인용
   },
 
   // 능력치 점수 표시 - 애니메이션 단순화
   createStatDots(containerId, value, color = 'blue') {
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+      console.log(`⚠️ 능력치 컨테이너 없음: ${containerId}`);
+      return;
+    }
+    
+    console.log(`⚡ 능력치 생성: ${containerId} = ${value}`);
     
     container.innerHTML = '';
     
@@ -438,10 +509,20 @@ App.components = {
     });
   },
 
-  // 아카이브 그리드 생성 - 애니메이션 제거
+  // 아카이브 그리드 생성 - 강화된 디버깅
   createArchiveGrid() {
+    console.log('📁 아카이브 그리드 생성 시작');
+    
     const grid = document.getElementById('archive-grid');
-    if (!grid || !App.data) return;
+    if (!grid) {
+      console.error('❌ archive-grid 요소를 찾을 수 없습니다!');
+      return;
+    }
+    
+    if (!App.data || !App.data.archives) {
+      console.error('❌ 아카이브 데이터가 없습니다:', App.data);
+      return;
+    }
     
     // 페이지 요소들 바로 보이게 하기
     const contentContainer = document.querySelector('.content-container');
@@ -467,6 +548,8 @@ App.components = {
     grid.innerHTML = '';
     
     App.data.archives.forEach((archive, index) => {
+      console.log(`📚 아카이브 ${index + 1} 생성:`, archive);
+      
       const item = App.utils.createElement('div', 'archive-item');
       
       const imageDiv = App.utils.createElement('div', 'archive-image');
@@ -484,11 +567,18 @@ App.components = {
       item.appendChild(imageDiv);
       item.appendChild(info);
       
+      // 강화된 클릭 이벤트
       item.addEventListener('click', () => {
+        console.log('🖱️ 아카이브 클릭됨:', archive);
         const basePath = App.utils.getBasePath();
         const newUrl = basePath + 'archive.html?id=' + archive.id;
-        console.log('🚀 아카이브 클릭, 이동할 URL:', newUrl);
+        console.log('🚀 아카이브 이동:', newUrl);
         window.location.href = newUrl;
+      });
+      
+      // 디버깅용 더블클릭
+      item.addEventListener('dblclick', () => {
+        alert(`아카이브: ${archive.title}\nID: ${archive.id}\n이동할 URL: ./archive.html?id=${archive.id}`);
       });
       
       grid.appendChild(item);
@@ -498,21 +588,35 @@ App.components = {
       item.style.opacity = '1';
       item.style.transform = 'translateY(0)';
     });
+    
+    console.log('✅ 아카이브 그리드 생성 완료');
   },
 
-  // 아카이브 상세 페이지 생성 - 애니메이션 제거
+  // 아카이브 상세 페이지 생성 - 강화된 디버깅
   createArchiveDetail(archiveId) {
     console.log('📁 아카이브 상세 페이지 생성:', archiveId);
     
     const archive = App.data.archives.find(a => a.id === parseInt(archiveId));
     if (!archive) {
       console.error('❌ 아카이브를 찾을 수 없습니다:', archiveId);
+      alert(`아카이브 ID ${archiveId}를 찾을 수 없습니다.`);
       return;
     }
 
+    console.log('✅ 아카이브 데이터:', archive);
+
     // 섹션 전환
-    document.getElementById('archive-list-section').classList.remove('active');
-    document.getElementById('archive-detail-section').classList.add('active');
+    const listSection = document.getElementById('archive-list-section');
+    const detailSection = document.getElementById('archive-detail-section');
+    
+    if (listSection) {
+      listSection.classList.remove('active');
+      listSection.style.display = 'none';
+    }
+    if (detailSection) {
+      detailSection.classList.add('active');
+      detailSection.style.display = 'block';
+    }
 
     // 상세 정보 채우기
     const elements = {
@@ -565,12 +669,23 @@ App.components = {
     }
 
     console.log('✅ 아카이브 상세 페이지 생성 완료:', archive.title);
+    alert(`${archive.title} 페이지가 로드되었습니다!`); // 성공 확인용
   },
 
-  // 블로그 리스트 생성 - 애니메이션 제거
+  // 블로그 리스트 생성 - 강화된 디버깅
   createBlogList() {
+    console.log('📝 블로그 리스트 생성 시작');
+    
     const list = document.getElementById('blog-list');
-    if (!list || !App.data) return;
+    if (!list) {
+      console.error('❌ blog-list 요소를 찾을 수 없습니다!');
+      return;
+    }
+    
+    if (!App.data || !App.data.blogPosts) {
+      console.error('❌ 블로그 데이터가 없습니다:', App.data);
+      return;
+    }
 
     // 페이지 요소들 바로 보이게 하기  
     const contentContainer = document.querySelector('.content-container');
@@ -596,6 +711,8 @@ App.components = {
     list.innerHTML = '';
     
     App.data.blogPosts.forEach((post, index) => {
+      console.log(`📰 블로그 ${index + 1} 생성:`, post);
+      
       const item = App.utils.createElement('div', 'blog-list-item');
       
       const content = App.utils.createElement('div', 'blog-list-content');
@@ -610,11 +727,18 @@ App.components = {
       content.appendChild(meta);
       item.appendChild(content);
       
+      // 강화된 클릭 이벤트
       item.addEventListener('click', () => {
+        console.log('🖱️ 블로그 클릭됨:', post);
         const basePath = App.utils.getBasePath();
         const newUrl = basePath + 'blog.html?id=' + post.id;
-        console.log('🚀 블로그 클릭, 이동할 URL:', newUrl);
+        console.log('🚀 블로그 이동:', newUrl);
         window.location.href = newUrl;
+      });
+      
+      // 디버깅용 더블클릭
+      item.addEventListener('dblclick', () => {
+        alert(`블로그: ${post.title}\nID: ${post.id}\n이동할 URL: ./blog.html?id=${post.id}`);
       });
       
       list.appendChild(item);
@@ -624,21 +748,35 @@ App.components = {
       item.style.opacity = '1';
       item.style.transform = 'translateX(0)';
     });
+    
+    console.log('✅ 블로그 리스트 생성 완료');
   },
 
-  // 블로그 상세 페이지 생성 - 애니메이션 제거
+  // 블로그 상세 페이지 생성 - 강화된 디버깅
   createBlogDetail(blogId) {
     console.log('📝 블로그 상세 페이지 생성:', blogId);
     
     const post = App.data.blogPosts.find(p => p.id === parseInt(blogId));
     if (!post) {
       console.error('❌ 블로그 포스트를 찾을 수 없습니다:', blogId);
+      alert(`블로그 ID ${blogId}를 찾을 수 없습니다.`);
       return;
     }
 
+    console.log('✅ 블로그 데이터:', post);
+
     // 섹션 전환
-    document.getElementById('blog-list-section').classList.remove('active');
-    document.getElementById('blog-detail-section').classList.add('active');
+    const listSection = document.getElementById('blog-list-section');
+    const detailSection = document.getElementById('blog-detail-section');
+    
+    if (listSection) {
+      listSection.classList.remove('active');
+      listSection.style.display = 'none';
+    }
+    if (detailSection) {
+      detailSection.classList.add('active');
+      detailSection.style.display = 'block';
+    }
 
     // 상세 정보 채우기
     const elements = {
@@ -691,18 +829,21 @@ App.components = {
     }
 
     console.log('✅ 블로그 상세 페이지 생성 완료:', post.title);
+    alert(`${post.title} 페이지가 로드되었습니다!`); // 성공 확인용
   }
 };
 
-// 페이지 초기화 시스템
+// 페이지 초기화 시스템 - 강화된 디버깅
 App.init = async function() {
   console.log('🚀 앱 초기화 시작...');
+  console.log('🌐 현재 URL:', window.location.href);
   
   // 데이터 로드
   await App.utils.loadData();
   
   if (!App.data) {
     console.error('❌ 데이터를 로드할 수 없습니다.');
+    alert('데이터 로드 실패!');
     return;
   }
 
@@ -712,6 +853,7 @@ App.init = async function() {
   
   console.log('📄 현재 페이지:', currentPage);
   console.log('🔗 URL 파라미터:', urlParams);
+  console.log('🏠 현재 위치:', window.location.pathname);
 
   // 🫧 물거품 효과 추가 - 유지
   App.components.createBackgroundBubbles();
@@ -720,36 +862,46 @@ App.init = async function() {
   App.components.createNavigation(currentPage);
   
   // 페이지별 콘텐츠 생성
+  console.log('📋 페이지별 초기화 시작...');
+  
   if (currentPage === 'character.html') {
+    console.log('👤 캐릭터 페이지 초기화');
     if (urlParams.id) {
-      console.log('👤 캐릭터 상세 페이지 모드, ID:', urlParams.id);
+      console.log('🔍 캐릭터 상세 모드, ID:', urlParams.id);
       App.components.createCharacterDetail(urlParams.id);
     } else {
-      console.log('👥 캐릭터 목록 페이지 모드');
+      console.log('📋 캐릭터 목록 모드');
       App.components.createCharacterGrid();
     }
   } else if (currentPage === 'archive.html') {
+    console.log('📁 아카이브 페이지 초기화');
     if (urlParams.id) {
-      console.log('📁 아카이브 상세 페이지 모드, ID:', urlParams.id);
+      console.log('🔍 아카이브 상세 모드, ID:', urlParams.id);
       App.components.createArchiveDetail(urlParams.id);
     } else {
-      console.log('📚 아카이브 목록 페이지 모드');
+      console.log('📋 아카이브 목록 모드');
       App.components.createArchiveGrid();
     }
   } else if (currentPage === 'blog.html') {
+    console.log('📝 블로그 페이지 초기화');
     if (urlParams.id) {
-      console.log('📝 블로그 상세 페이지 모드, ID:', urlParams.id);
+      console.log('🔍 블로그 상세 모드, ID:', urlParams.id);
       App.components.createBlogDetail(urlParams.id);
     } else {
-      console.log('📰 블로그 목록 페이지 모드');
+      console.log('📋 블로그 목록 모드');
       App.components.createBlogList();
     }
   } else if (currentPage === 'introduction.html') {
+    console.log('📖 Introduction 페이지 초기화');
     App.components.initIntroPage();
   } else if (currentPage === 'world.html') {
+    console.log('🌍 World 페이지 초기화');
     App.components.initWorldPage();
   } else if (currentPage === 'index.html' || currentPage === '') {
+    console.log('🏠 메인 페이지 초기화');
     App.components.initMainPage();
+  } else {
+    console.log('❓ 알 수 없는 페이지:', currentPage);
   }
   
   // 공통 기능 설정
@@ -763,6 +915,12 @@ App.init = async function() {
   }
   
   console.log('✅ 앱 초기화 완료!');
+  
+  // 추가 디버깅 정보
+  console.log('🔧 디버깅 정보:');
+  console.log('  - 더블클릭으로 각 항목의 URL 확인 가능');
+  console.log('  - 페이지 이동 시 콘솔에서 로그 확인');
+  console.log('  - 상세 페이지 로드 시 알림창 표시');
 };
 
 // 공통 기능 설정
@@ -777,18 +935,37 @@ App.setupCommonFeatures = function() {
       });
     }
   });
+  
+  // 전역 에러 핸들러 추가
+  window.addEventListener('error', (e) => {
+    console.error('❌ 전역 에러:', e.error);
+  });
 };
 
 // 🎬 DOMContentLoaded에서 앱 초기화
 document.addEventListener('DOMContentLoaded', () => {
   console.log('📱 DOM 로딩 완료!');
-  App.init();
+  console.log('⏰ 초기화 시작 시간:', new Date().toLocaleTimeString());
+  
+  try {
+    App.init();
+  } catch (error) {
+    console.error('❌ 초기화 중 에러:', error);
+    alert('초기화 중 문제가 발생했습니다: ' + error.message);
+  }
 });
 
 // 페이지 쇼 이벤트 (뒤로가기 대응)
 window.addEventListener('pageshow', (event) => {
+  console.log('🔄 페이지 쇼 이벤트:', event.persisted ? '캐시에서 복원' : '새로 로드');
+  
   if (event.persisted) {
     document.body.classList.add('loaded');
     document.body.style.opacity = '1';
   }
+});
+
+// 언로드 이벤트
+window.addEventListener('beforeunload', () => {
+  console.log('👋 페이지 떠나는 중...');
 });
