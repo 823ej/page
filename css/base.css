@@ -174,8 +174,8 @@ input, textarea, select {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-md);
-  opacity: 1; /* 기본적으로 보이도록 변경 */
-  transform: translateY(0); /* 기본 위치로 변경 */
+  opacity: 0;
+  transform: translateY(20px);
   transition: all var(--duration-slower) var(--easing-default);
 }
 
@@ -184,45 +184,16 @@ input, textarea, select {
   transform: translateY(0);
 }
 
-/* 🔥 핵심 수정: 섹션 표시 로직 변경 */
+/* 섹션 공통 - 원래대로 복원 */
 .section {
-  display: block; /* 기본적으로 표시되도록 변경 */
-  opacity: 1; /* 기본적으로 보이도록 변경 */
+  display: none;
+  opacity: 0;
   transition: opacity 0.6s ease-in-out;
 }
 
-/* 숨김 처리는 JavaScript에서 .hidden 클래스로 처리 */
-.section.hidden {
-  display: none !important;
-  opacity: 0 !important;
-}
-
-/* active 클래스는 명시적으로 표시 */
 .section.active {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  position: relative !important;
-  z-index: 10 !important;
-}
-
-/* 🎯 상세 섹션 전용 강제 표시 규칙 */
-#character-detail-section,
-#archive-detail-section,
-#blog-detail-section {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  position: relative !important;
-  z-index: 10 !important;
-}
-
-/* URL 파라미터가 있을 때 목록 섹션 숨김 */
-#character-list-section.hide-for-detail,
-#archive-list-section.hide-for-detail,
-#blog-list-section.hide-for-detail {
-  display: none !important;
-  opacity: 0 !important;
+  display: block;
+  opacity: 1;
 }
 
 .section-header {
